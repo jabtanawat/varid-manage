@@ -1,0 +1,334 @@
+﻿@font-face {
+    font-family: 'Kanit-ExtraLight';
+    src: url('../font/Kanit/Kanit-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Kanit-Light';
+    src: url('../font/Kanit/Kanit-Light.ttf') format('truetype');
+}
+
+/* ========================================================================================== */
+/* =====                                  VALIABLES CSS                                 ===== */
+/* ========================================================================================== */
+
+:root {
+    /* ===== Font and typegraphy */
+    --body-font-ExtraLight: 'Kanit-ExtraLight', sans-serif;
+    --body-font: 'Kanit-Light', sans-serif;
+    --body-color: #F7F7FC;
+    /* ===== Color */
+    --font-color-dark: #30353A;
+    --font-color: 	#6C757D;
+    --font-color-white: #FFF;
+    --font-color-black: #7D8488;
+    --font-color-tiltmenu: #8391A2;
+    --font-color-menuhover: #CEDCE4;
+    --sidebar-color: #FFF;
+    --sidebar-color-sub: 	#F5F5F5;
+    --sidebar-color-light: #79A2FF;
+    --first-color: #407BFF;
+}
+
+* {
+    font-family: var(--body-font);
+}
+
+body {
+    color: var(--font-color-dark);
+    background-color: var(--body-color);
+}
+
+/* ========================================================================================== */
+/* =====                                     SIDEBAR                                    ===== */
+/* ========================================================================================== */
+
+#sidebar_wrapper {
+    position: fixed;
+    height: 100vh;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: .5s;
+    z-index: 1000;
+    color: var(--font-color);
+    background: var(--sidebar-color);
+    box-shadow: 2px 2px 10px #E8E8E8;
+}
+
+#sidebar_content {
+    height: 100vh;
+    overflow: auto;
+}
+
+#sidemenu_content {
+    margin-bottom: 4.5rem;
+}
+
+#page_content_wrapper {
+    transition: .5s;
+}
+
+/* =======================================================================================
+=====       sidebar brand
+======================================================================================= */
+
+.sidebar_brand {
+    font-size: 1.7rem;
+    padding: .5rem 1rem;
+    display: block;
+    color: var(--font-color);
+    font-family: var(--body-font-ExtraLight);
+}
+
+.sidebar_brand:hover {
+    color: var(--font-color);
+}
+
+.picture_brand {
+    height: 45px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.sidebar_header {
+    text-transform: capitalize;
+    padding: 1.2rem 1.2rem .8rem;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .7px;
+    color: var(--font-color-tiltmenu);
+}
+
+/* ========================================================================================== */
+/* =====                                 SIDEBAR SCROLL                                 ===== */
+/* ========================================================================================== */
+
+#sidebar_content::-webkit-scrollbar {
+    width: 0;
+    border-radius: 10px;
+    background: var(--sidebar-color);
+}
+
+#sidebar_content::-webkit-scrollbar-thumb {
+    background-color: var(--sidebar-color);
+    border-radius: 10px;
+}
+
+/* ========================================================================================== */
+/* =====                                    SIDEMENU                                    ===== */
+/* ========================================================================================== */
+
+.sidebar_icon {
+    font-size: 25px;
+    width: 35px;
+    color: var(--font-color);
+}
+
+.sidebar_icon-sm {
+    width: 25px;
+    font-size: 12px;
+}
+
+.navbar-nav .has-sub > a.collapsed::after {
+    transition: 0.4s ease;
+}
+
+.navbar-nav .has-sub > a.collapsed::after {
+    color: var(--font-color);
+    font-size: 15px;
+    content: "\f107";
+}
+
+.navbar-nav .has-sub > a::after {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    color: var(--font-color);
+    display: block;
+    content: "\f105";
+    font-family: 'Font Awesome\ 5 Free';
+    font-weight: 900;
+    font-size: 13px;
+    line-height: 30px;
+    margin-top: -15px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--font-color);
+    font-family: var(--body-font-ExtraLight);
+    font-size: 15px;
+    padding: 10px 10px 10px 20px;
+    display: block;
+    position: relative;
+    z-index: 2;
+    letter-spacing: .5px;
+}
+
+/* =======================================================================================
+=====       sidebar menu text
+======================================================================================= */
+
+#sidebar_content #sidemenu_content li a i{
+    position: absolute;
+    padding-top: 1px;    
+}
+
+#sidebar_content #sidemenu_content li a span{
+    font-family: var(--body-font-ExtraLight);
+    padding-left: 35px;
+}
+
+.menu .submenu_box .nav-link {
+    color: var(--font-color-tiltmenu);
+    text-transform: capitalize;
+    font-family: var(--body-font-ExtraLight);
+    font-size: 15px;
+    padding: 9px 10px 9px 45px;
+    display: block;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    letter-spacing: .3px;
+}
+
+.navbar-nav > li > a:hover {
+    color: var(--font-color);
+}
+
+.menu .submenu_box .nav-link:hover {
+    color: var(--font-color);
+}
+
+.submenu_box li a {
+    font-size: 14px;
+    padding: 7px 10px 7px 35px;
+    color: var(--font-color);
+}
+
+.menu {
+    margin: 0 10px;
+    background-color: var(--sidebar-color-sub);
+    border-radius: 5px;
+}
+
+/* ========================================================================================= */
+/* =====                                  ACTIVE                                       ===== */
+/* ========================================================================================= */
+
+#sidebar_content #sidemenu_content li a.active i {
+    color: var(--font-color-white);
+}
+
+.navbar-nav .nav-link.active {
+    color: var(--font-color-white);
+    font-weight: 500;
+    margin: auto 10px auto 10px;
+    border-radius: 5px;
+    background-color: #90CAF9;
+    padding-left: 10px;
+}
+
+.submenu_box .nav-link.active {
+    color: var(--font-color-white);
+    font-weight: 500;
+    margin: auto 0 auto 0;
+    padding: 9px 0;
+    padding-left: 45px;
+}
+
+/* ========================================================================================= */
+/* =====                               CLOSE SIDEBAR                                   ===== */
+/* ========================================================================================= */
+
+#wrapper.show #sidebar_wrapper {
+    transform: translateX(0);
+}
+
+#wrapper.show #page_content_wrapper {
+    margin-left: 260px;
+}
+
+#brand_show {
+    transition: .9s;
+}
+
+#wrapper #brand_show {
+    display: block;
+}
+
+#wrapper.show #brand_show {
+    display: block;
+}
+
+@media screen and (min-width: 1024px) {
+    #wrapper #sidebar_wrapper {
+        transform: translateX(0);
+    }
+
+    #wrapper #brand_show {
+        display: none;
+    }
+
+    #wrapper #page_content_wrapper {
+        margin-left: 260px;
+    }
+
+    #wrapper.show #sidebar_wrapper {
+        transform: translateX(-100%);
+    }
+
+    #wrapper.show #page_content_wrapper {
+        margin-left: 0;
+    }
+}
+
+/* ========================================================================================== */
+/* =====                                      NAVBAR                                    ===== */
+/* ========================================================================================== */
+
+.navbar {
+    box-shadow: 10px 0 5px 0 #DEE2E6;
+}
+
+.name_navbar {
+    font-size: 13px;
+    font-weight: 500;
+    color: #7D8488;
+    padding: 10px 10px 0 0;
+}
+
+.picture_logo_navbar {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+.picture_navbar {
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+}
+
+.picture_dropdown {
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}
+
+/* ========================================================================================== */
+/* =====                                     CONTENT                                    ===== */
+/* ========================================================================================== */
+
+#page_content_wrapper {
+    width: 100%;
+    margin-left: 0;
+    transition: .5s;
+}
+
+#content {
+    margin-top: .9rem;
+    margin-bottom: .9rem;
+}

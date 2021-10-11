@@ -1,0 +1,258 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<style>
+  .card {
+    border-color: #EDF2F9;
+  }
+
+  hr {
+    color: #6C757D;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="#">รายการสั่งซื้อ</a></li>
+    <li class="breadcrumb-item active" aria-current="page">คำสั่งซื้อ</li>
+  </ol>
+</nav>
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <p class="mb-0"><span class="me-2"><i class='bx bx-shopping-bag'></i></span> คำสั่งซื้อ</p>
+      <p class="mb-0">ข้อมูล ณ วันที่ {{datenow}} {{timenow}} </p>
+    </div>        
+    <hr>
+    <!-- nav tab -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#Or1" type="button" role="tab" aria-controls="home" aria-selected="true">รอตรวจสอบ</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#Or2" type="button" role="tab" aria-controls="profile" aria-selected="false">ตรวจสอบแล้ว</button>
+      </li>
+    </ul>
+    <!-- tab content -->
+    <div class="tab-content mt-3" id="myTabContent">
+      <div class="tab-pane fade show active" id="Or1" role="tabpanel" aria-labelledby="home-tab">
+        <div class="table-responsive">
+          <table id="dtproduct" style="width:100%" class="table table-bordered">
+            <thead>
+              <tr class="text-center">
+                <th style="width:20%">รหัสสั่งซื้อ</th>
+                <th style="width:20%">ชื่อผู้สั่งซื้อ</th>            
+                <th style="width:20%">เวลาสั่งซื้อ</th>     
+                <th style="width:10%">สถานะ</th>            
+                <th style="width:10%"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in data %}
+              <tr>
+                <td>{{x[0]}}</td>
+                <td>{{x[1]}}</td>
+                <td>{{x[2]}}</td> 
+                <td style="color:red">ยังไม่ได้ตรวจสอบ</td>
+                <td><a  href="{{ url_for('back.orderdetail',id= x[0] )}}">ตรวจสอบ</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+        <div class="tab-pane fade" id="Or2" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="table-responsive">
+        <table id="dtproduct" style="width:100%" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width:20%">รหัสสั่งซื้อ</th>
+              <th style="width:20%">ชื่อผู้สั่งซื้อ</th>            
+              <th style="width:20%">เวลาสั่งซื้อ</th>     
+              <th style="width:10%">สถานะ</th>            
+              <th style="width:10%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in data2 %}
+            <tr>
+              <td>
+                {{x[0]}}
+              </td>
+              <td>
+                {{x[1]}}
+              </td>
+              <td>
+                {{x[2]}}
+              </td> 
+                <td style="color:green">
+                  ตรวจสอบแล้ว
+                </td>
+              <td>
+                <a  href="{{ url_for('back.productdetail',id= x[0] )}}" target="_blank">ดูข้อมูล</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Modal -->
+  <form name="saveproduct" action="{{ url_for('back.saveproduct')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">เพิ่มสินค้า</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+          <div class="container">
+              <div class="row">
+                  <div class="col">
+                      <div class="container">
+                          <div class="row">
+                              <div class="col-md-1"></div>
+                              <div class="col-md-9"> <br />
+                                  <h4 align="center"> ข้อมูลสินค้า </h4>
+                                  <hr />
+
+                                  <div class="mb-3 row">
+                                      <label for="staticEmail" class="col-sm-2 col-form-label">รหัสสินค้า</label>
+                                      <div class="col-sm-10">
+                                          <input type="text" class="form-control" id="P_Id" name="P_Id">
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="inputPassword" class="col-sm-2 col-form-label">ชื่อสินค้า</label>
+                                      <div class="col-sm-10">
+                                          <input type="text" class="form-control" id="P_Name" name="P_Name">
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="inputPassword" class="col-sm-2 col-form-label">หมวดสินค้า</label>
+                                      <div class="col-sm-10">
+                                          <select class="form-select" aria-label="Default select example" id="P_Group" name="P_Group">                                         
+                                              <option selected>เลือกหมวดสินค้า</option>
+                                              {% for sel in data1 %}
+                                              <option value="{{sel[0]}}"> {{sel[1]}}</option>                                                                                       
+                                              {% endfor %}
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="inputPassword" class="col-sm-2 col-form-label">ราคา(บาท)</label>
+                                      <div class="col-sm-4">
+                                          <input type="text" class="form-control" id="P_Price" name="P_Price">
+                                      </div>
+                                      <label for="inputPassword" class="col-sm-2 col-form-label">จำนวน(ชิ้น)</label>
+                                      <div class="col-sm-4">
+                                          <input type="text" class="form-control" id="P_Count" name="P_Count">
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="inputPassword"
+                                          class="col-sm-2 col-form-label">วันที่</label>
+                                      <div class="col-sm-10">
+                                          <input type="text" class="thai-datepicker form-control" placeholder="ว/ด/ป" id="P_Date" name="P_Date">
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="inputPassword"
+                                          class="col-sm-2 col-form-label">รายละเอียด</label>
+                                      <div class="col-sm-10">
+                                          <textarea class="form-control" id="P_Detail"  name="P_Detail" rows="5"></textarea>
+                                      </div>
+                                  </div>
+                               
+
+
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+                  <div class="col col-lg-3">
+                      <br />
+                      <h4 align="center"> รูปภาพ </h4>
+                      <hr />
+                      <!-- Uploaded image area-->
+                      <div class="image-preview mx-auto text-center" id="image-preview">
+                       
+                          <img id="blah" src="/static/img/nopic.jpg" alt="" class="image-preview__image " width="250" height="250" />
+                      </div>
+                      <div class="text-center mt-4" style="margin-bottom:5px;">
+                          <small class="text-muted">รูปภาพ<span class="text-danger">* ขนาด 250 x 250</span></small>
+                      </div>
+                      <div class="form-group">
+                          <div class="custom-file">
+                              <div class="mb-4">
+                                  <input type='file' class="form-control form-control-sm" name='files' accept="image/x-png,image/gif,image/jpeg" required onchange="readURL(this);">
+                                <!--<input class="form-control form-control-sm" type="file" id="formFile" accept="image/x-png,image/jpeg" required onchange="readUrl(this)">-->  
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+
+              </div>
+     
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
+        <button type="submit" class="btn btn-success">บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+  {% endblock %}
+
+
+
+  {% block scripts %}
+
+
+ <!-- <script>
+
+    $(document).ready(function () {
+      $('#dtproduct').DataTable();
+    });
+
+
+  </script>-->
+
+
+
+<script>
+  $(document).ready(function initialize() {
+      "use strict";
+      $('.thai-datepicker').datepicker({
+          language: 'th-th',
+          format: 'dd/mm/yyyy',
+          today: true,
+          autoclose: true
+      });
+  });
+
+  var myCollapse = document.getElementById('collapse1')
+  var bsCollapse = new bootstrap.Collapse(myCollapse, {
+      toggle: true
+  })
+
+  var navLink = document.querySelector('#sidemenu_content a[href="/bn/order"]')
+  navLink.classList.add("active");
+</script>
+{% endblock %}

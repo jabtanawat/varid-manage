@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Varid14 - Dashboard</title>
+    <link href="/static/img/logo-D.png" rel="icon">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.0/css/bootstrap.css" />
+    <link rel="stylesheet" href="/static/plugins/fontawesome-5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="/static/plugins/boxicons-2.0.9/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/LyDashboad.css" />  
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datepicker-thai-thai/css/datepicker.css" />
+    <link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/dataTables.bootstrap5.min.css" />
+    {% block styles %} {% endblock %}
+</head>
+<body>
+
+    <div id="wrapper" class="d-flex">
+        <!-- sidebar -->
+        <nav id="sidebar_wrapper">
+            <!-- sidebar brand -->
+            <a href="/bn" class="sidebar_brand text-center text-decoration-none">
+                <img src="/static/img/logo-D.png" class="picture_brand"><span class="align-middle ms-1">ashboard</span>
+            </a>
+            <!-- sidebar content -->
+            <div id="sidebar_content">
+                <ul id="sidemenu_content" class="navbar-nav align-self-stretch">
+                    <li class="sidebar_header">MAIN</li>
+                    <li>
+                        <a href="/bn" class="nav-link">
+                            <i class='bx bx-tachometer sidebar_icon'></i><span>Overview</span>
+                        </a>
+                    </li>
+                    <li class="has-sub">
+                        <a href="#collapse1" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
+                            <i class='bx bx-cart-alt sidebar_icon'></i><span>รายการสั่งซื้อ</span>
+                        </a>
+                        <div class="menu collapse" id="collapse1">
+                            <ul class="navbar-nav submenu_box">
+                                <li><a href="{{url_for('back.order')}}" class="nav-link">คำสั่งซื้อ</a></li>
+                                <li><a href="{{url_for('back.ordrerhistory')}}" class="nav-link">ประวัติรายการสั่งซื้อ</a></li>
+                                <li><a href="#" class="nav-link">รายการชำระเงิน</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="has-sub">
+                        <a href="#collapse2" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
+                            <i class='bx bx-book-alt sidebar_icon'></i><span>ทะเบียน</span>
+                        </a>
+                        <div class="menu collapse" id="collapse2">
+                            <ul class="navbar-nav submenu_box">
+                                <li><a href="{{url_for('back.productgroup')}}" class="nav-link">หมวดหมู่</a></li>
+                                <li><a href="{{url_for('back.product')}}" class="nav-link">สินค้า</a></li>
+                                <li><a href="{{url_for('back.empolyee')}}" class="nav-link">พนักงาน</a></li>
+                                <li><a href="{{url_for('back.member')}}" class="nav-link">สมาชิก</a></li>
+                                <li><a href="{{url_for('back.bank')}}" class="nav-link">ธนาคาร</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="has-sub">
+                        <a href="#collapse4" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
+                            <i class='bx bx-message-alt-detail sidebar_icon'></i><span>รายงาน</span>
+                        </a>
+                        <div class="menu collapse" id="collapse4">
+                            <ul class="navbar-nav submenu_box">
+                                <li><a href="#" class="nav-link">ทะเบียนสินค้า</a></li>                    
+                                <li><a href="#" class="nav-link">ประวัติการสั่งซื้อ</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="has-sub">
+                        <a href="#collapse5" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
+                            <i class='bx bx-cog sidebar_icon'></i><span>ตั้งค่าระบบ</span>
+                        </a>
+                        <div class="menu collapse" id="collapse5">
+                            <ul class="navbar-nav submenu_box">
+                                <li><a href="#" class="nav-link">กำหนดผู้ใช้งาน</a></li>
+                                <!--<li><a href="{{url_for('back.runing')}}" class="nav-link">กำหนดเลขที่เอกสาร</a></li>-->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- page content -->
+        <div id="page_content_wrapper">
+            <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
+                <div class="container-fluid">
+                    <ul class="navbar-nav d-flex flex-row  mb-2 mb-lg-0">
+                        <li class="nav-item" id="brand_show">
+                            <a class="nav-link" aria-current="page" href="#">
+                                <img src="/static/img/logo-D.png" class="picture_logo_navbar"><span class="align-middle fw-bold ms-1">ashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="button-bar" role="button">
+                                <i class="fas fa-bars mt-2"></i>                               
+                            </a>
+                        </li>
+                    </ul>                   
+                    <form class="d-flex">
+                        <div class="dropdown">
+                            <a href="#" class="nav-link py-0" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="name_navbar">Tanawat Lawprasert</span>
+                                <img src="/static/img/user.png" class="picture_navbar">
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-muted" href="#"><i class='bx bx-user'></i><span class="col-form-label-sm ms-2">Profile</span></a></li>
+                                <li><a class="dropdown-item text-muted" href="#"><i class='bx bx-log-out'></i><span class="col-form-label-sm ms-2">Sign Out</span></a></li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+            <div id="content">
+                <div class="container-fluid">
+                    {% block content %} {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery-3.6.0.js"></script>
+    <script src="/static/plugins/bootstrap-5.1.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/LyDashboard.js"></script>
+    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker.js"></script>
+    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker-thai.js"></script>
+    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/locales/bootstrap-datepicker.th.js"></script>
+    <script src="/static/plugins/DataTables/DataTables-1.11.2/js/jquery.dataTables.min.js"></script>
+    <script src="/static/plugins/ckeditor5/ckeditor.js"></script>
+    {% block scripts %} {% endblock %}
+</body>
+</html>

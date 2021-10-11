@@ -1,0 +1,110 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="/static/css/bn_index.css" />  
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Overview -->
+
+<div class="row">
+    <div class="col-sm mb-4">
+        <div class="card">
+            <div class="card-body">
+                <p class="overview-text-card-head">จำนวนคำสั่งซื้อวันนี้</p>
+                <p class="overview-text-card-body">0.00</p>
+                <span class="overview-icon-card"><i class='bx bx-shopping-bag'></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm mb-4">
+        <div class="card">
+            <div class="card-body">
+                <p class="overview-text-card-head">ยอดสั่งซื้อวันนี้</p>
+                <p class="overview-text-card-body">0.00</p>
+                <span class="overview-icon-card"><i class='bx bx-coin'></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm mb-4">
+        <div class="card">
+            <div class="card-body">
+                <p class="overview-text-card-head">จำนวนคำสั่งซื้อทั้งหมด</p>
+                <p class="overview-text-card-body">0.00</p>
+                <span class="overview-icon-card"><i class='bx bx-cart'></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm mb-4">
+        <div class="card">
+            <div class="card-body">
+                <p class="overview-text-card-head">ยอดสั่งซื้อทั้งหมด</p>
+                <p class="overview-text-card-body">0.00</p>
+                <span class="overview-icon-card"><i class='bx bx-coin-stack'></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">ข้อมูลยอดขายในแต่ละเดือน</div>
+    <div class="card-body">
+        <div class="chart">
+            <canvas id="LoanChart" style="min-height: 320px; height: 320px; max-height: 320px; max-width: 100%;"></canvas>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/vendor/chart.js/chart.min.js"></script>
+<script>
+    var myCollapse = document.getElementById('collapse1')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/bn"]')
+    navLink.classList.add("active");
+
+    showGraphLoan()
+
+    function showGraphLoan() {
+        var ctx = document.getElementById('LoanChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+                datasets: [{
+                    label: 'ยอดสั่งซื้อ',
+                    data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)' 
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

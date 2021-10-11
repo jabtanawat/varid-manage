@@ -1,0 +1,44 @@
+.card {
+    border-color: #EDF2F9;
+}
+
+.overview-text-card-head {
+    font-size: 16px;
+    color: #95AAC9;
+    letter-spacing: .7px;
+    margin-bottom: .5rem;
+}
+
+.overview-text-card-body {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.overview-text-card {
+    font-size: 15px;
+    margin-bottom: .5rem;
+}
+
+.overview-icon-card {
+    position: absolute;
+    top: 25px;
+    right: 16px;
+    font-size: 3rem;
+    color: #95AAC9;
+}
+
+.card-header {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .7px;
+    background-color: #FFF;
+    border-color: #EDF2F9;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.icon-card {
+    font-size: 2.2rem;
+    color: #95AAC9;
+}

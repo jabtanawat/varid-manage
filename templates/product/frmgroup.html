@@ -1,0 +1,119 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    .feedback-sm {
+        font-size: .84rem;
+        padding-top: 10px;
+        color: red;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="#">ทะเบียน</a></li>
+        <li class="breadcrumb-item"><a href="/bn/productgroup">หมวดหมู่</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">เพิ่มหมวดหมู่</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <p><span class="me-2"><i class='bx bx-window-alt'></i></span><span class="name_page">เพิ่มหมวดหมู่</span></p>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for msg in messages %}
+                        <div class="alert alert-danger col-form-label-sm" role="alert">
+                            {{ msg }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form method="POST" name="group">
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">รหัสหมวดหมู่</label>
+                        <input type="text" name="groupid" id="groupid" class="form-control form-control-sm">
+                        <span class="feedback-groupid feedback-sm"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">ชื่อหมวดหมู่</label>
+                        <input type="text" name="groupname" id="groupname" class="form-control form-control-sm">
+                        <span class="feedback-groupname feedback-sm"></span>
+                    </div>
+                </form>                
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-sm btn-success button-save"><span class="me-2"><i class='bx bx-save'></i></span>บันทึก</button>
+                </div>     
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var myCollapse = document.getElementById('collapse2')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/bn/productgroup"]')
+    navLink.classList.add("active");
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get('mode')
+    if (mode == 'edit') {
+        let id = params.get('id')
+        let url = `/api/group/${id}`
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const pages = document.querySelectorAll(".name_page");
+            for (i = 0; i < pages.length; i++) {
+                pages[i].innerHTML = "แก้ไขหมวดหมู่"
+            }
+            if (data.length > 0){
+                document.getElementById('groupid').value = data[0]
+                document.getElementById('groupid').setAttribute('readonly', true)
+                document.getElementById('groupname').value = data[1]       
+            }               
+        });
+    }
+
+    const btnSave = document.querySelector('.button-save')
+    btnSave.addEventListener('click', function(){
+        let valida = 0
+        if (document.getElementById('groupid').value == ""){
+            document.querySelector('.feedback-groupid').innerHTML = ""
+            document.querySelector('.feedback-groupid').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-groupid').innerHTML = "" }
+
+        if (document.getElementById('groupname').value == ""){
+            document.querySelector('.feedback-groupname').innerHTML = ""
+            document.querySelector('.feedback-groupname').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-groupname').innerHTML = "" }
+
+        if (valida == 1) { return; }
+        if (mode == 'add') {
+            document.group.action = '/savegroupproduct'
+        }else{
+            document.group.action = '/editproductgroup'
+        }        
+        document.group.submit()
+    })
+</script>
+
+{% endblock %}

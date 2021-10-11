@@ -1,0 +1,181 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+
+
+
+{% block styles %}
+<style>
+    .ck-editor__editable {
+        min-height: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="card">
+    <div class="card-header">
+        เพิ่มสินค้า
+    </div>
+    <div class="card-body">
+        <form name="saveproduct" action="{{ url_for('back.saveproduct')}}" method="POST" enctype="multipart/form-data"
+            class="form-horizontal">
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9"> <br />
+                                    <h4 align="center"> ข้อมูลสินค้า </h4>
+                                    <hr />
+
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">รหัสสินค้า</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="P_Id" name="P_Id">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">ชื่อสินค้า</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="P_Name" name="P_Name">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">หมวดสินค้า</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select" aria-label="Default select example" id="Group"
+                                                name="Group">
+                                                <option selected>เลือกหมวดสินค้า</option>
+                                                {% for sel in data %}
+
+
+                                                <option value="{{sel[0]}}" > {{sel[1]}}</option>
+
+
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">ราคา(บาท)</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="P_Price" name="P_Price">
+                                        </div>
+                                       <!--<label for="inputPassword" class="col-sm-2 col-form-label">จำนวน(ชิ้น)</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="P_Count" name="P_Count">
+                                        </div>--> 
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">รายละเอียด</label>
+                                        <div class="col-sm-10">
+
+                                            <div id="editor" name="P_Detail"></div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-lg-3">
+                        <br />
+                        <h4 align="center"> รูปภาพ </h4>
+                        <hr />
+                        <!-- Uploaded image area-->
+                        <div class="image-preview mx-auto text-center" id="image-preview">
+
+                            <img id="blah" src="/static/img/nopic.jpg" alt="" class="image-preview__image " width="250"
+                                height="250" />
+                        </div>
+                        <div class="text-center mt-4" style="margin-bottom:5px;">
+                            <small class="text-muted">รูปภาพ<span class="text-danger">* ขนาด 250 x 250</span></small>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <div class="mb-4">
+                                    <input type='file' class="form-control form-control-sm" name='files'
+                                        accept="image/x-png,image/gif,image/jpeg" required onchange="readURL(this);">
+                                    <!--<input class="form-control form-control-sm" type="file" id="formFile" accept="image/x-png,image/jpeg" required onchange="readUrl(this)">-->
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-success">บันทึก</button>
+                    </div>
+
+                </div>
+
+        </form>
+    </div>
+
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+<script>
+
+    $(document).ready(function initialize() {
+        "use strict";
+        $('.thai-datepicker').datepicker({
+            language: 'th-th',
+            format: 'dd/mm/yyyy',
+            today: true,
+            autoclose: true
+        });
+
+    });
+
+
+</script>
+
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            editor.ui.view.editable.element.style.height = '400px';
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+
+
+
+{% endblock %}

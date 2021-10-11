@@ -1,0 +1,185 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        รายละเอียดคำสั่งซื้อ
+    </div>
+    <div class="card-body">
+        <form name="saveproduct" action="{{ url_for('back.saveproduct')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9"> <br />
+                                    <h4 align="center"> ข้อมูลคำสั่งซื้อ</h4>
+                                    <hr />
+
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">รหัสคำสั่งซื้อ</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="O_Id" name="O_Id" value="{{info.O_Id}}"  readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">ชื่อผู้สั่งซื้อ</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="O_Id" name="O_Id" value="{{info.O_MemberName}}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">เบอร์โทร</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="O_Id" name="O_Id" value="{{info.O_Phone}}" readonly >
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">ที่อยู่จัดส่ง</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="O_Id" name="O_Id" value="{{info.O_Address}}" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">เลขที่ขนส่ง</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="O_Id" name="O_Id" value="" >
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">บริษัทขนส่ง</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select"  aria-label="Default select example" id="P_Group" name="P_Group"    >
+                                                <option selected >เลือกบริษัทขนส่ง</option>
+                                                <option value="Kerry Express" >Kerry Express</option>
+                                                <option value="Flash Express" >Flash Express</option>
+                                                <option value="EMS" >EMS</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <P  style="text-align: center;">รายการสินค้า</P>
+                                   <hr>
+
+                                    <div class="table-responsive">
+                                        <table id="dtproduct" style="width:100%" class="table table-bordered">
+                                          <thead>
+                                            <tr>
+                                              <th style="width:30%">รหัสสินค้า</th>
+                                              <th style="width:40%">ชื่อสินค้า</th>            
+                                              <th style="width:30%">จำนวนที่สั่ง</th>     
+                                                  
+                                        
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {% for x in data %}
+                                            <tr>
+                                              <td>
+                                                {{x[0]}}
+                                              </td>
+                                              <td>
+                                                {{x[1]}}
+                                              </td>
+                                              <td>
+                                                {{x[2]}}
+                                              </td> 
+                                             
+                    
+                                              
+                                            </tr>
+                                
+                                            {% endfor %}
+                                
+                                          </tbody>
+                                        </table>
+                                
+                                      </div>
+                                
+                                    {% if "{{info.O_Status}}" == 0 %}
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-info">ยืนยันคำสั่งซื้อ</button>
+                                        <button type="submit" class="btn btn-info">พิมพ์</button>
+
+                                       </div>
+                                    {% else %}  
+                                       <div class="text-center">
+                                        <button type="submit" class="btn btn-info">พิมพ์</button>
+
+                                       </div>
+                                      
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col col-lg-3">
+                        <br />
+                        <h4 align="center"> รูปภาพสลิปการโอนเงิน </h4>
+                        <hr />
+                        <!-- Uploaded image area-->
+                        <div class="image-preview mx-auto text-center" id="image-preview">
+                         
+                            <img id="blah" src="/static/img/nopic.jpg" alt="" class="image-preview__image " width="300" height="300" />
+                        </div>
+                    <div class=" text-center">
+                        <a href="/static/img/nopic.jpg" id="pop" style="text-align: center;" align="center">
+                         
+                            คลิกเพื่อดู
+                        </a>
+                    </div>
+                        
+                       
+                       
+                    </div>
+
+                </div>
+        </form>
+    </div>
+
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+<script>
+
+    $(document).ready(function initialize() {
+        "use strict";
+        $('.thai-datepicker').datepicker({
+            language: 'th-th',
+            format: 'dd/mm/yyyy',
+            today: true,
+            autoclose: true
+        });
+
+    });
+
+
+</script>
+
+
+<script >
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $('#blah')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<style>
+  .card {
+    border-color: #EDF2F9;
+  }
+
+  hr {
+    color: #6C757D;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="#">รายการสั่งซื้อ</a></li>
+    <li class="breadcrumb-item active" aria-current="page">ประวัติคำสั่งซื้อ</li>
+  </ol>
+</nav>
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <p class="mb-0"><span class="me-2"><i class='bx bx-shopping-bag'></i></span> ประวัติคำสั่งซื้อ</p>
+   
+    </div>        
+    <hr>
+    
+ 
+    <!-- tab content -->
+ 
+      
+        <div class="table-responsive">
+          <table id="dt" style="width:100%" class="table table-bordered">
+            <thead>
+              <tr class="text-center">
+                <th style="width:20%">รหัสสั่งซื้อ</th>
+                <th style="width:20%">ชื่อผู้สั่งซื้อ</th>            
+                <th style="width:20%">วันที่สั่งซื้อ</th>     
+          
+                <th style="width:10%"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in data %}
+              <tr>
+                <td>{{x[0]}}</td>
+                <td>{{x[1]}}</td>
+                <td>{{x[2]}}</td> 
+             <td><a  href="{{ url_for('back.orderdetail',id= x[0] )}}">ดูข้อมูล</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+     
+      
+    </div>
+  </div>
+
+
+
+
+  {% endblock %}
+
+
+
+  {% block scripts %}
+
+
+ <script>
+
+    $(document).ready(function () {
+      $('#dt').DataTable();
+    });
+
+
+  </script>
+
+
+
+<script>
+  $(document).ready(function initialize() {
+      "use strict";
+      $('.thai-datepicker').datepicker({
+          language: 'th-th',
+          format: 'dd/mm/yyyy',
+          today: true,
+          autoclose: true
+      });
+  });
+
+  var myCollapse = document.getElementById('collapse1')
+  var bsCollapse = new bootstrap.Collapse(myCollapse, {
+      toggle: true
+  })
+
+  var navLink = document.querySelector('#sidemenu_content a[href="/bn/order"]')
+  navLink.classList.add("active");
+</script>
+{% endblock %}

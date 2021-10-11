@@ -1,0 +1,258 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block content %}
+<h3>ทะเบียน\ทะเบียนธนาคาร</h2>
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            ทะเบียนธนาคาร
+        </div>
+        <div class="card-body">
+
+            <div align="right">
+
+                <!-- <a  href="{{ url_for('back.productadd')}}" class="btn btn-primary" >เพิ่มสินค้า</a>-->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    เพิ่มธนาคาร
+                </button>
+
+            </div>
+
+            <hr>
+            <div class="table-responsive">
+                <table id="dtproduct" style="width:100%" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width:30%">รหัสธนาคาร</th>
+                            <th style="width:30%">เลขบัญชีธนาคาร</th>
+                            <th style="width:30%">ชื่อธนาคาร</th>
+                       
+                            <th style="width:10%"></th>
+                           
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in data %}
+                        <tr>
+                            <td>
+                                {{x.0}}
+                            </td>
+                            <td>
+                                {{x.1}}
+                            </td>
+                            <td>
+                                {{x.2}}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal{{x.0}}"> อัพเดท </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal{{x.0}}"> ลบ </button>
+                            </td>
+                        </tr>
+                        <!-- Modal -->
+                        <form name="editproductgroup" action="{{ url_for('back.editproductgroup')}}" method="POST"
+                            enctype="multipart/form-data" class="form-horizontal">
+                            <div class="modal fade" id="exampleModal{{x.0}}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel1">แก้ไขธนาคาร</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-1"></div>
+                                                                <div class="col-md-9"> <br />
+                                                                    <h4 align="center"> ธนาคาร </h4>
+                                                                    <hr />
+
+                                                                    <div class="mb-3 row">
+                                                                        <label for="staticEmail"
+                                                                            class="col-sm-2 col-form-label">รหัสธนาคาร</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control"
+                                                                                id="BankId" name="BankId" value={{x.0}}>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3 row">
+                                                                        <label for="inputPassword"
+                                                                            class="col-sm-2 col-form-label">เลขบัญชีธนาคาร</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control"
+                                                                                id="Bankname" name="Bankname" value={{x.1}}>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3 row">
+                                                                        <label for="inputPassword"
+                                                                            class="col-sm-2 col-form-label">ชื่อธนาคาร</label>
+                                                                        <div class="col-sm-10">
+                                                                        
+                                                                                <select class="form-select" aria-label="Default select example" id="Bankname" name="Bankname" value={{x.2}}>
+                                                                                    <option selected>เลือกธนาคาร</option>
+                                                                                    <option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</option>
+                                                                                    <option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</option>
+                                                                                    <option value="ธนาคารกรุงไทย">ธนาคารกรุงไทย</option>
+                                                                                    <option value="ธนาคารกรุงเทพ">ธนาคารทหารไทยธนชาต</option>
+                                                                                    <option value="ธนาคารกสิกรไทย">	ธนาคารไทยพาณิชย์</option>
+                                                                                    <option value="ธนาคารกรุงไทย">ธนาคารกรุงศรีอยุธยา</option>
+                                                                                    <option value="ธนาคารกรุงเทพ">	ธนาคารเกียรตินาคินภัทร</option>
+                                                                                    <option value="ธนาคารกสิกรไทย">	ธนาคารซีไอเอ็มบีไทย</option>
+                                                                                    <option value="ธนาคารกรุงไทย">ธนาคารออมสิน</option>
+                    
+                                                                                    
+                                                                                </select>
+                                                                        </div>
+                                                                    </div>
+
+
+
+
+                                                                    <div class="text-center">
+                                                                        <button type="submit"
+                                                                            class="btn btn-info">อัพเดท</button>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    </div>
+
+
+
+
+
+    <!-- Modal -->
+    <form name="savegroupproduct" action="{{ url_for('back.savebank')}}" method="POST"
+        enctype="multipart/form-data" class="form-horizontal">
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">เพิ่มธนาคาร</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-9"> <br />
+                                                <h4 align="center"> ข้อมูลธนาคาร </h4>
+                                                <hr />
+                                                <div class="mb-3 row">
+                                                    <label for="staticEmail"
+                                                        class="col-sm-2 col-form-label">รหัสธนาคาร</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control"
+                                                            id="BankId" name="BankId" >
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 row">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-2 col-form-label">เลขบัญชีธนาคาร</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control"
+                                                            id="Bankaccount" name="Bankaccount" >
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 row">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-2 col-form-label">ชื่อธนาคาร</label>
+                                                    <div class="col-sm-10">
+                                                
+                                                            <select class="form-select" aria-label="Default select example" id="Bankname" name="Bankname">
+                                                                <option selected>เลือกธนาคาร</option>
+                                                                <option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</option>
+                                                                <option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</option>
+                                                                <option value="ธนาคารกรุงไทย">ธนาคารกรุงไทย</option>
+                                                                <option value="ธนาคารกรุงเทพ">ธนาคารทหารไทยธนชาต</option>
+                                                                <option value="ธนาคารกสิกรไทย">	ธนาคารไทยพาณิชย์</option>
+                                                                <option value="ธนาคารกรุงไทย">ธนาคารกรุงศรีอยุธยา</option>
+                                                                <option value="ธนาคารกรุงเทพ">	ธนาคารเกียรตินาคินภัทร</option>
+                                                                <option value="ธนาคารกสิกรไทย">	ธนาคารซีไอเอ็มบีไทย</option>
+                                                                <option value="ธนาคารกรุงไทย">ธนาคารออมสิน</option>
+
+                                                                
+                                                            </select>
+                                                    </div>
+                                                </div>
+
+
+
+
+
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-success">บันทึก</button>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+
+    {% endblock %}
+
+    {% block scripts %}
+
+
+
+
+
+
+
+
+
+    {% endblock %}
