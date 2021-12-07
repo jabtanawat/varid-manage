@@ -62,13 +62,14 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script>
     var myCollapse = document.getElementById('collapse2')
     var bsCollapse = new bootstrap.Collapse(myCollapse, {
         toggle: true
     })
 
-    var navLink = document.querySelector('#sidemenu_content a[href="/bn/productgroup"]')
+    var navLink = document.querySelector('#sidemenu_content a[href="/category"]')
     navLink.classList.add("active");
 
     const params = new URLSearchParams(window.location.search);
@@ -91,28 +92,44 @@
         });
     }
 
-    const btnSave = document.querySelector('.button-save')
-    btnSave.addEventListener('click', function(){
+    document.querySelector('.button-save').addEventListener('click', function(){
         let valida = 0
-        if (document.getElementById('groupid').value == ""){
+        let id = document.getElementById('groupid').value
+        let name = document.getElementById('groupname').value
+
+        if (id == ""){
             document.querySelector('.feedback-groupid').innerHTML = ""
             document.querySelector('.feedback-groupid').append('กรุณากรอกข้อมูล')
             valida = 1
         }else{ document.querySelector('.feedback-groupid').innerHTML = "" }
 
-        if (document.getElementById('groupname').value == ""){
+        if (name == ""){
             document.querySelector('.feedback-groupname').innerHTML = ""
             document.querySelector('.feedback-groupname').append('กรุณากรอกข้อมูล')
             valida = 1
         }else{ document.querySelector('.feedback-groupname').innerHTML = "" }
 
         if (valida == 1) { return; }
+
         if (mode == 'add') {
-            document.group.action = '/savegroupproduct'
+            document.group.action = '/category/savedata'
         }else{
-            document.group.action = '/editproductgroup'
-        }        
-        document.group.submit()
+            document.group.action = '/category/editdata'
+        }   
+
+        Swal.fire({
+            text: "ต้องการบันทึกข้อมูลหรือไม่่ ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.group.submit()
+            }
+        })            
     })
 </script>
 

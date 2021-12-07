@@ -5,13 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varid14 - Dashboard</title>
-    <link href="/static/img/logo-D.png" rel="icon">
+    <link href="/static/image/logo-D.png" rel="icon">
     <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.0/css/bootstrap.css" />
     <link rel="stylesheet" href="/static/plugins/fontawesome-5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="/static/plugins/boxicons-2.0.9/css/boxicons.min.css" />
     <link rel="stylesheet" href="/static/css/LyDashboad.css" />  
     <link rel="stylesheet" href="/static/plugins/bootstrap-datepicker-thai-thai/css/datepicker.css" />
-    <link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/dataTables.bootstrap5.min.css" />
     {% block styles %} {% endblock %}
 </head>
 <body>
@@ -21,7 +20,7 @@
         <nav id="sidebar_wrapper">
             <!-- sidebar brand -->
             <a href="/bn" class="sidebar_brand text-center text-decoration-none">
-                <img src="/static/img/logo-D.png" class="picture_brand"><span class="align-middle ms-1">ashboard</span>
+                <img src="/static/image/logo-D.png" class="picture_brand"><span class="align-middle ms-1">ashboard</span>
             </a>
             <!-- sidebar content -->
             <div id="sidebar_content">
@@ -50,7 +49,7 @@
                         </a>
                         <div class="menu collapse" id="collapse2">
                             <ul class="navbar-nav submenu_box">
-                                <li><a href="{{url_for('back.productgroup')}}" class="nav-link">หมวดหมู่</a></li>
+                                <li><a href="/category" class="nav-link">หมวดหมู่</a></li>
                                 <li><a href="{{url_for('back.product')}}" class="nav-link">สินค้า</a></li>
                                 <li><a href="{{url_for('back.empolyee')}}" class="nav-link">พนักงาน</a></li>
                                 <li><a href="{{url_for('back.member')}}" class="nav-link">สมาชิก</a></li>
@@ -91,7 +90,7 @@
                     <ul class="navbar-nav d-flex flex-row  mb-2 mb-lg-0">
                         <li class="nav-item" id="brand_show">
                             <a class="nav-link" aria-current="page" href="#">
-                                <img src="/static/img/logo-D.png" class="picture_logo_navbar"><span class="align-middle fw-bold ms-1">ashboard</span>
+                                <img src="/static/image/logo-D.png" class="picture_logo_navbar"><span class="align-middle fw-bold ms-1">ashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -104,7 +103,7 @@
                         <div class="dropdown">
                             <a href="#" class="nav-link py-0" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="name_navbar">Tanawat Lawprasert</span>
-                                <img src="/static/img/user.png" class="picture_navbar">
+                                <img src="/static/image/user.png" class="picture_navbar">
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item text-muted" href="#"><i class='bx bx-user'></i><span class="col-form-label-sm ms-2">Profile</span></a></li>
@@ -128,7 +127,6 @@
     <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker.js"></script>
     <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker-thai.js"></script>
     <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/locales/bootstrap-datepicker.th.js"></script>
-    <script src="/static/plugins/DataTables/DataTables-1.11.2/js/jquery.dataTables.min.js"></script>
     <script src="/static/plugins/ckeditor5/ckeditor.js"></script>
     {% block scripts %} {% endblock %}
 </body>

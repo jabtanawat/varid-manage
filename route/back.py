@@ -83,11 +83,7 @@ def callback():
 
 
 
-@back.route('/bn/product/')
-def product():
-    Dt =  run_query_fetchall("SELECT P_Id,P_Name,(Select Name  FROM productgroup  where Id=P_Group) as P_GroupName,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status,P_Group,P_Price,P_Count,P_Date,P_Detail FROM product") 
-    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
-    return render_template('bn/product.html',data=Dt,data1=Dt1)
+
 
 @back.route('/bn/productadd')
 def productadd():
@@ -153,55 +149,14 @@ def productedit(id):
     Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
     return render_template('bn/productedit.html',info=info,data=Dt1)
 
-# =================================================================================
-# === หมวดหมู่ GET
-# =================================================================================
 
 
-@back.route('/bn/productgroup')
-def productgroup():
-    Dt =  run_query_fetchall("SELECT Id, Name FROM productgroup where Status=true") 
-    return render_template('bn/product/productgroup.html', data=Dt) 
 
-@back.route('/bn/frmgroup')
-def frmgroup():
-    return render_template('bn/product/frmgroup.html') 
 
-# =================================================================================
-# === หมวดหมู่ POST
-# =================================================================================
 
-@back.route('/savegroupproduct', methods=["POST"])
-def savegroupproduct():
-    if request.method == 'POST':
-        groupid = request.form["groupid"]
-        groupname = request.form["groupname"]
-        row = library.TableWhere("productgroup", "Id", groupid)
-        if row > 0 :
-            flash("ไม่สามารถบันทึกข้อมูลได้ !")
-            return render_template('bn/product/frmgroup.html')
-        sql = "INSERT INTO productgroup (Id, Name, Status) VALUE (%s, %s, %s)"
-        executes = (groupid, groupname, True)
-        run_query_commit(sql, executes)
-        return redirect('/bn/productgroup') 
 
-@back.route('/editproductgroup', methods=["POST"])
-def editproductgroup():
-    if request.method == 'POST':
-        groupid = request.form["groupid"]
-        groupname = request.form["groupname"]
-        sql ="update productgroup set Id = %s, Name = %s where Id = %s"
-        executes = (groupid, groupname, groupid)
-        run_query_commit(sql, executes)
-        return redirect('/bn/productgroup')
 
-@back.route('/deletegroup/<id>', methods=["POST", "GET"])
-def deletegroup(id):
-    sql = "delete from productgroup where Id = %s"
-    executes = (id)
-    run_query_commit(sql, executes)
-    flash("ลบข้อมูลเรียบร้อยแล้ว !")
-    return redirect('/bn/productgroup')
+
 
 
 @back.route('/editproduct', methods=["POST"])
@@ -332,6 +287,12 @@ def editbank():
 def runing():
   
     return render_template('bn/runing.html')
+
+@back.route('/bn/product/')
+def product():
+    Dt =  run_query_fetchall("SELECT P_Id,P_Name,(Select Name  FROM productgroup  where Id=P_Group) as P_GroupName,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status,P_Group,P_Price,P_Count,P_Date,P_Detail FROM product") 
+    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
+    return render_template('bn/product.html',data=Dt,data1=Dt1)
 
 @back.route('/bn/ordrerhistory')
 def ordrerhistory():
