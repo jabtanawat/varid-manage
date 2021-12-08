@@ -4,9 +4,13 @@ from library import *
 
 api = Blueprint('api', __name__)
 
-@api.route('/api/group/<id>', methods=['POST', 'GET'])
-def group(id):
-    sql = f"select Id, Name from productgroup where Status = true and Id = {id}"
+# =================================================================================
+# === หมวดหมู่ API
+# =================================================================================
+
+@api.route('/api/category/<id>', methods=['POST', 'GET'])
+def category(id):
+    sql = f"select Id, Name, Description from Category where Id = '{id}'"
     data =  run_query_fetchone(sql)
     #page = int(page) #เลขที่หน้า
     #record = 12 #จำนวนสินค้าที่จะแสดง

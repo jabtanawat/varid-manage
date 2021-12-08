@@ -2,6 +2,7 @@ from threading import Timer
 from flask import Flask, render_template, redirect
 from route.back import back
 from route.Category import category
+from route.Product import product
 from route.api import api
 from datetime import time, timedelta
 
@@ -10,6 +11,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.permanent_session_lifetime = timedelta(hours=1)
 app.register_blueprint(back)
 app.register_blueprint(category)
+app.register_blueprint(product)
 app.register_blueprint(api)
 
 @back.errorhandler(404)

@@ -85,10 +85,7 @@ def callback():
 
 
 
-@back.route('/bn/productadd')
-def productadd():
-    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
-    return render_template('bn/productadd.html',data=Dt1)
+
 
 
 @back.route('/saveproduct',methods=["POST"])
@@ -287,12 +284,6 @@ def editbank():
 def runing():
   
     return render_template('bn/runing.html')
-
-@back.route('/bn/product/')
-def product():
-    Dt =  run_query_fetchall("SELECT P_Id,P_Name,(Select Name  FROM productgroup  where Id=P_Group) as P_GroupName,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status,P_Group,P_Price,P_Count,P_Date,P_Detail FROM product") 
-    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
-    return render_template('bn/product.html',data=Dt,data1=Dt1)
 
 @back.route('/bn/ordrerhistory')
 def ordrerhistory():

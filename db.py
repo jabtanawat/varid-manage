@@ -31,7 +31,6 @@ def run_query_commit(sql, string):
         cur.execute(sql, (string))
         cur.commit()
     conn.close()
-    return print("ok")
 
 def run_commit(sql):
     mysql_connect()
@@ -39,4 +38,3 @@ def run_commit(sql):
         cur.execute(sql)
         cur.commit()
     conn.close()
-    return print("ok")

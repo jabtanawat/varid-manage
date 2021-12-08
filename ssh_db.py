@@ -71,7 +71,6 @@ def run_query_commit(sql, executes):
         connection.commit()
     mysql_disconnect()
     close_ssh_tunnel()
-    return print("ok")
 
 def run_commit(sql):
     open_ssh_tunnel()
@@ -81,7 +80,6 @@ def run_commit(sql):
         connection.commit()
     mysql_disconnect()
     close_ssh_tunnel()
-    return print("ok")
 
 def mysql_disconnect():    
     connection.close()

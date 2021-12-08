@@ -1,0 +1,144 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="/static/css/tables.css" />
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    hr {
+        color: #6C757D;
+    }
+    a.dropdown-toggle::after {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none">ทะเบียน</a></li>
+      <li class="breadcrumb-item active" aria-current="page">สินค้า</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <p class="mb-0"><span class="me-2"><i class='bx bx-category'></i></span>สินค้า</p>
+      <a href="/product/frmproduct?mode=add" class="btn btn-sm btn-success"><span class="me-2"><i class='bx bx-add-to-queue'></i></span> เพิ่มสินค้า</a>
+    </div>      
+    <hr>
+    <div class="table-responsive">
+      <table id="data-table-basic" style="width:100%" class="table">
+        <thead>
+          <tr>
+            <th style="width:20%">รหัสสินค้า</th>
+            <th style="width:30%">ชื่อสินค้า</th>
+            <th style="width:20%">หมวดสินค้า</th>
+            <th style="width:10%">สถานะสินค้า</th>
+            <th style="width:15%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in data %}
+          <tr>
+            <td>{{x[0]}}</td>
+            <td>{{x[1]}}</td>
+            <td>{{x[2]}}</td>
+            <td>{{x[3]}}</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center flex-row">
+                  <div class="px-2">
+                      <div class="dropdown">
+                          <a class="text-decoration-none text-dark dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                              <i class='bx bx-cog'></i><span class="ms-2">เพิ่มเติม</span>
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li class="col-form-label col-form-label-sm">
+                                <a class="dropdown-item" href="/product/frmproduct?mode=edit&id={{x.0}}"><i class='bx bx-edit' ></i><span class="ms-2">แก้ไข</span></a>
+                            </li>
+                            <li class="col-form-label col-form-label-sm">
+                                <a class="dropdown-item" href="#"><i class='bx bx-image-alt'></i><span class="ms-2">รูปภาพ</span></a>
+                            </li>
+                            <li class="col-form-label col-form-label-sm">
+                                <a class="dropdown-item text-danger" role="button" onclick="deletes('{{x.0}}')"><i class='bx bx-trash'></i><span class="ms-2">ลบ</span></a>                                             
+                            </li>
+                          </ul>
+                      </div>
+                  </div>                                
+              </div>                                                  
+          </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/static/plugins/DataTables/DataTables-1.11.2/js/jquery.dataTables.min.js"></script>
+<script>
+
+  var myCollapse = document.getElementById('collapse2')
+  var bsCollapse = new bootstrap.Collapse(myCollapse, {
+      toggle: true
+  })
+
+  var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
+  navLink.classList.add("active");
+
+  $('#data-table-basic').DataTable({
+      "displayLength": 10,
+  });
+
+
+  </script>
+
+
+
+  <script>
+
+    $(document).ready(function initialize() {
+      "use strict";
+      $('.thai-datepicker').datepicker({
+        language: 'th-th',
+        format: 'dd/mm/yyyy',
+        today: true,
+        autoclose: true
+      });
+
+    });
+
+
+  </script>
+
+
+  <script>
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#blah')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+
+
+  
+
+
+
+  {% endblock %}

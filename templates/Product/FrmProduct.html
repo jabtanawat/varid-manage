@@ -1,0 +1,129 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<style>
+    .ck-editor__editable {
+        min-height: 250px;
+    }
+</style>
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    .feedback-sm {
+        font-size: .84rem;
+        padding-top: 10px;
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">ทะเบียน</a></li>
+        <li class="breadcrumb-item"><a href="/product" class="text-decoration-none">สินค้า</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">เพิ่มสินค้า</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <p><span class="me-2"><i class='bx bx-window-alt'></i></span><span class="name_page">เพิ่มสินค้า</span></p>
+        <form name="saveproduct" method="POST">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="col-form-label col-form-label-sm">รหัสสินค้า</label>
+                                <input type="text" class="form-control form-control-sm" id="P_Id" name="P_Id">
+                                <span class="feedback-groupid feedback-sm"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="col-form-label col-form-label-sm">ชื่อสินค้า</label>
+                                <input type="text" class="form-control form-control-sm" id="P_Name" name="P_Name">
+                                <span class="feedback-groupid feedback-sm"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="col-form-label col-form-label-sm">หมวดสินค้า</label>
+                                <select class="form-select form-select-sm" aria-label="Default select example" id="Group" name="Group">
+                                    <option selected>-- เลือก --</option>
+                                    {% for sel in data %}
+                                    <option value="{{sel[0]}}" > {{sel[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="feedback-groupid feedback-sm"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="col-form-label col-form-label-sm">ราคา (บาท)</label>
+                                <input type="text" class="form-control form-control-sm" id="P_Price" name="P_Price">
+                                <span class="feedback-groupid feedback-sm"></span>
+                            </div>
+                        </div>
+                    </div>      
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input mt-2" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                            <label class="form-check-label col-form-label-sm" for="flexSwitchCheckChecked">ใช้งาน</label>
+                        </div> 
+                    </div>                          
+                    <div class="mb-3">
+                        <label class="col-form-label col-form-label-sm">รายละเอียดเพิ่มเติม</label>
+                        <div id="editor" name="P_Detail"></div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn btn-sm btn-success button-save"><span class="me-2"><i class='bx bx-save'></i></span>บันทึก</button>
+                    </div>  
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/plugins/ckeditor5/ckeditor.js"></script>
+<script>
+    var myCollapse = document.getElementById('collapse2')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
+    navLink.classList.add("active");
+
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+            toolbar: [ 'bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList' ]
+        } )
+        .catch( error => {
+            console.log( error );
+        } );
+
+</script>
+
+
+<script>
+    /*function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }*/
+</script>
+
+{% endblock %}

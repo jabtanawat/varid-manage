@@ -2,27 +2,28 @@ from flask import Blueprint, render_template, redirect, url_for, request,session
 from ssh_db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library
 
-category = Blueprint('category', __name__)
+product = Blueprint('product', __name__)
 
 # =================================================================================
-# === หมวดหมู่ GET
+# === สินค้า GET
 # =================================================================================
 
-@category.route('/category')
+@product.route('/product')
 def index():
-    sql = "SELECT Id, Name FROM Category"
+    sql = "SELECT P_Id, P_Name,(Select Name  FROM Category  where Id = P_CategoryId) as P_GroupName, case when P_Status = true then 'ใช้งาน' else 'ปิดใช้งาน' end as P_Status, P_CategoryId, P_Price P_Detail FROM Product"
     dt =  run_query_fetchall(sql) 
-    return render_template('Category/index.html', data = dt) 
+    return render_template('Product/index.html', data = dt) 
 
-@category.route('/category/frmcategory')
+@product.route('/product/frmproduct')
 def frmcategory():
-    return render_template('Category/FrmCategory.html') 
+    Dt1 = run_query_fetchall("SELECT Id, Name FROM Category") 
+    return render_template('Product/FrmProduct.html', data = Dt1) 
 
 # =================================================================================
-# === หมวดหมู่ POST
+# === สินค้า POST
 # =================================================================================
 
-@category.route('/category/savedata', methods=["POST"])
+@product.route('/category/savedata', methods=["POST"])
 def savegroupproduct():
     if request.args.get('mode') :
         mode = str(request.args.get('mode'))
@@ -48,7 +49,7 @@ def savegroupproduct():
         else :
             return jsonify("error")
 
-@category.route('/category/deletedata/<id>', methods=["POST", "GET"])
+@product.route('/category/deletedata/<id>', methods=["POST", "GET"])
 def deletedata(id):
     row = library.TableWhere("Product", "P_CategoryId", id)
     if row > 0 :                
