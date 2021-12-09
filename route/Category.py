@@ -39,21 +39,25 @@ def savegroupproduct():
             sql = "INSERT INTO Category (Id, Name, Description) VALUE (%s, %s, %s)"
             executes = (Id, Name, Description)
             run_query_commit(sql, executes)
+            flash("บันทึกข้อมูลเรียบร้อย !", "success-save")
             return jsonify("success")
         elif mode == "edit" :
             sql ="update Category set Name = %s, Description = %s where Id = %s"
             executes = (Name, Description, Id)
             run_query_commit(sql, executes)
+            flash("แก้ไขข้อมูลเรียบร้อย !", "success-save")
             return jsonify("success")
         else :
             return jsonify("error")
 
 @category.route('/category/deletedata/<id>', methods=["POST", "GET"])
 def deletedata(id):
-    row = library.TableWhere("Product", "P_CategoryId", id)
+    row = library.TableWhere("Product", "CategoryId", id)
     if row > 0 :                
-        return jsonify("error")
+        flash("ไม่สามารถทำรายการได้ !", "error")
+        return redirect('/category')
     sql = "delete from Category where Id = %s"
     executes = (id)
     run_query_commit(sql, executes)
-    return jsonify("success")
+    flash("ลบข้อมูลเรียบร้อย !", "success-save")
+    return redirect('/category')

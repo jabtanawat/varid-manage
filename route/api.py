@@ -26,3 +26,13 @@ def category(id):
     #Count = len(Row) 
     #PageTotal = math.ceil(Count/record) #จำนวนหน้าที่แสดง
     return jsonify(data)
+
+# =================================================================================
+# === สินค้า API
+# =================================================================================
+
+@api.route('/api/product/<id>', methods=['POST', 'GET'])
+def product(id):
+    sql = f"select Id, Name, CategoryId, CONVERT(Price, CHAR), IF(Active, 'true', 'false') AS Active, Description from Product where Id = '{id}'"
+    data =  run_query_fetchone(sql)
+    return jsonify(data)

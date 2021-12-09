@@ -38,15 +38,15 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">รหัสสินค้า</label>
-                                <input type="text" class="form-control form-control-sm" id="P_Id" name="P_Id">
-                                <span class="feedback-groupid feedback-sm"></span>
+                                <input type="text" class="form-control form-control-sm" id="txtId" name="txtId">
+                                <span class="feedback-id feedback-sm"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">ชื่อสินค้า</label>
-                                <input type="text" class="form-control form-control-sm" id="P_Name" name="P_Name">
-                                <span class="feedback-groupid feedback-sm"></span>
+                                <input type="text" class="form-control form-control-sm" id="txtName" name="txtName">
+                                <span class="feedback-name feedback-sm"></span>
                             </div>
                         </div>
                     </div>
@@ -54,32 +54,32 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">หมวดสินค้า</label>
-                                <select class="form-select form-select-sm" aria-label="Default select example" id="Group" name="Group">
-                                    <option selected>-- เลือก --</option>
+                                <select class="form-select form-select-sm" aria-label="Default select example" id="txtCategoryId" name="txtCategoryId">
+                                    <option value="" selected>-- เลือก --</option>
                                     {% for sel in data %}
                                     <option value="{{sel[0]}}" > {{sel[1]}}</option>
                                     {% endfor %}
                                 </select>
-                                <span class="feedback-groupid feedback-sm"></span>
+                                <span class="feedback-categoryid feedback-sm"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">ราคา (บาท)</label>
-                                <input type="text" class="form-control form-control-sm" id="P_Price" name="P_Price">
-                                <span class="feedback-groupid feedback-sm"></span>
+                                <input type="text" class="form-control form-control-sm text-end" id="txtPrice" name="txtPrice" placeholder="0.00">
+                                <span class="feedback-price feedback-sm"></span>
                             </div>
                         </div>
                     </div>      
                     <div class="mb-3">
                         <div class="form-check form-switch">
-                            <input class="form-check-input mt-2" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                            <label class="form-check-label col-form-label-sm" for="flexSwitchCheckChecked">ใช้งาน</label>
+                            <input class="form-check-input mt-2" type="checkbox" role="switch" id="txtActive" name="txtActive" checked>
+                            <label class="form-check-label col-form-label-sm" for="txtActive">ใช้งาน</label>
                         </div> 
                     </div>                          
                     <div class="mb-3">
                         <label class="col-form-label col-form-label-sm">รายละเอียดเพิ่มเติม</label>
-                        <div id="editor" name="P_Detail"></div>
+                        <div id="txtDescription" name="txtDescription"></div>
                     </div>
                     <div class="text-center mt-4">
                         <button type="button" class="btn btn-sm btn-success button-save"><span class="me-2"><i class='bx bx-save'></i></span>บันทึก</button>
@@ -93,6 +93,7 @@
 
 {% block scripts %}
 <script src="/static/plugins/ckeditor5/ckeditor.js"></script>
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script>
     var myCollapse = document.getElementById('collapse2')
     var bsCollapse = new bootstrap.Collapse(myCollapse, {
@@ -102,13 +103,124 @@
     var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
     navLink.classList.add("active");
 
+    const toCurrency = (number, currency, lang = undefined) => Intl.NumberFormat(lang, {style : 'currency', currency, currencyDisplay: "code" }).format(number).replace(currency, "").trim()
+
+    document.getElementById("txtPrice").addEventListener("blur", function(){
+        this.value = toCurrency(this.value, 'USD', 'en-us')
+    })
+
+    var myEditor;
+
     ClassicEditor
-        .create( document.querySelector( '#editor' ), {
+        .create( document.querySelector('#txtDescription'), {
             toolbar: [ 'bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList' ]
+        } )
+        .then( editor => {
+            myEditor = editor;
         } )
         .catch( error => {
             console.log( error );
         } );
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get('mode')
+    if (mode == 'edit') {
+        let id = params.get('id')
+        let url = `/api/product/${id}`
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const pages = document.querySelectorAll(".name_page");
+            for (i = 0; i < pages.length; i++) {
+                pages[i].innerHTML = "แก้ไขหมวดหมู่"
+            }
+            if (data.length > 0){
+                document.getElementById('txtId').value = data[0]
+                document.getElementById('txtId').setAttribute('readonly', true)
+                document.getElementById('txtName').value = data[1]       
+                document.getElementById('txtCategoryId').value = data[2]       
+                document.getElementById('txtPrice').value = toCurrency(data[3], 'USD', 'en-us')   
+                if (data[4] == 'true') {
+                    document.getElementsByName('txtActive')[0].checked = true
+                }else{
+                    document.getElementsByName('txtActive')[0].checked = false
+                }
+                myEditor.setData(data[5]);
+            }              
+        });
+    }
+
+    document.querySelector('.button-save').addEventListener('click', function(){
+        let valida = 0
+        let Id = document.getElementById('txtId').value
+        let Name = document.getElementById('txtName').value
+        let CategoryId = document.getElementById('txtCategoryId').value
+        let Price = document.getElementById('txtPrice').value
+        let Active = document.getElementsByName('txtActive')[0].checked 
+        let Description = myEditor.getData()
+
+        if (Id == ""){
+            document.querySelector('.feedback-id').innerHTML = ""
+            document.querySelector('.feedback-id').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-id').innerHTML = "" }
+
+        if (Name == ""){
+            document.querySelector('.feedback-name').innerHTML = ""
+            document.querySelector('.feedback-name').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-name').innerHTML = "" }
+
+        if (CategoryId == ""){
+            document.querySelector('.feedback-categoryid').innerHTML = ""
+            document.querySelector('.feedback-categoryid').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-categoryid').innerHTML = "" }
+
+        if (Price == ""){
+            document.querySelector('.feedback-price').innerHTML = ""
+            document.querySelector('.feedback-price').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-price').innerHTML = "" }
+
+        if (valida == 1) { return; }
+
+        var data = new FormData();
+        data.append('Id', Id);
+        data.append('Name', Name);
+        data.append('CategoryId', CategoryId);
+        data.append('Price', Price);
+        data.append('Active', Active);
+        data.append('Description', Description);
+
+        let option = {
+            method: 'POST',
+            body: data,
+        }        
+
+        Swal.fire({
+            text: "ต้องการบันทึกข้อมูลหรือไม่ ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                fetch(`/product/savedata?mode=${mode}`, option)
+                .then(response => response.json())
+                .then(data => {
+                    if (data == 'success'){                        
+                        window.location.href = "/product"
+                    }else{
+                        Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
+                    }      
+                });
+            }
+        })            
+    })
 
 </script>
 

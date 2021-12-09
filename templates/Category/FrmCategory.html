@@ -133,7 +133,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data == 'success'){
-                        Swal.fire({icon: 'success',text: 'บันทึกข้อมูลเรียบร้อย !',showConfirmButton: false, timer: 3500})
                         window.location.href = "/category"
                     }else{
                         Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
