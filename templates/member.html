@@ -11,7 +11,7 @@
 
             <div align="right">
 
-                <!-- <a  href="{{ url_for('back.productadd')}}" class="btn btn-primary" >เพิ่มสินค้า</a>-->
+            
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     เพิ่มสมาชิก
                 </button>
@@ -135,7 +135,7 @@
 
 
     <!-- Modal -->
-    <form name="savegemployee" action="" method="POST" enctype="multipart/form-data"
+    <form name="savemember" action="{{ url_for('member.savemember')}}" method="POST" enctype="multipart/form-data"
         class="form-horizontal">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -161,7 +161,7 @@
                                                     <label for="staticEmail"
                                                         class="col-sm-3 col-form-label">รหัส</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="EmpId" name="EmpId">
+                                                        <input type="text" class="form-control" id="MemberId" name="MemberId">
                                                     </div>
                                                 </div>
 
@@ -169,8 +169,8 @@
                                                     <label for="inputPassword"
                                                         class="col-sm-3 col-form-label">ชื่อผู้ใช้</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="F_Name"
-                                                            name="F_Name">
+                                                        <input type="text" class="form-control" id="Name"
+                                                            name="Name">
                                                     </div>
                                                 </div>
                                                 

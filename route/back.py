@@ -173,119 +173,19 @@ def editproduct():
         Dt =  run_query_fetchall(f"SELECT *  FROM product where Status=true") 
     return render_template('bn/product.html',data=Dt) 
 
-@back.route('/bn/empolyee')
-def empolyee():
-    Dt =  run_query_fetchall("SELECT *  FROM employee where Status=true") 
-    return render_template('bn/empolyee.html',data=Dt) 
-
-
-@back.route('/saveemployee',methods=["POST"])
-def saveemployee():
-    if request.method == 'POST':
-        EmpId = request.form["EmpId"]
-        Prefix = request.form["Prefix"]
-        F_Name = request.form["F_Name"]
-        L_Name = request.form["L_Name"]
-        Idcard = request.form["Idcard"]
-        Sex = request.form["Sex"]
-        Age = request.form["Age"]
-        Address = request.form["Address"]
-        Birthday = request.form["Birthday"]
-        Phone = request.form["Phone"]
-       # Picpath = request.form["files"]
-        Status = request.form["Status"]
-      
-      
-        
-        sql = "INSERT INTO employee (EmpId, Prefix,F_Name,L_Name,Idcard,Sex,Age,Address,Birthday,Phone,Picpath,Status) VALUE (%s, %s, %s,%s, %s, %s,%s, %s, %s, %s, %s, %s)"
-        executes = (EmpId, Prefix,F_Name,L_Name,Idcard,Sex,Age,Address,library.ConvertDate(Birthday) ,Phone,"",Status)
-        run_query_commit(sql, executes)
-
-    Dt =  run_query_fetchall("SELECT *  FROM employee where Status=true") 
-    return render_template('bn/empolyee.html',data=Dt) 
-
-@back.route('/bn/order')
-def order():
-     
-     Dt =  run_query_fetchall(f"SELECT O_Id,O_MemberId,O_Time,O_Status  FROM orders where O_Status <> 0 and O_Date='{datetime.today().strftime('%Y-%m-%d')}' ") 
-     Dt1 =  run_query_fetchall(f"SELECT O_Id,O_MemberId,O_Time,O_Status  FROM orders where O_Status =  0 and O_Date='{datetime.today().strftime('%Y-%m-%d')}'  ") 
-     DateNow = library.FormatDate(datetime.now()) 
-     TimeNow = library.FormatTime(datetime.now())
-
-     return render_template('bn/order.html',data=Dt,data2=Dt1,datenow=DateNow,timenow=TimeNow)
-
-
-@back.route('/bn/orderdetail/<id>')
-def orderdetail(id):
-    class order:
-        def __init__(self,O_Id, O_MemberId, O_Date,O_Status,O_Phone,O_Address,O_Time,O_MemberName):
-            self.O_Id = O_Id
-            self.O_MemberId = O_MemberId
-            self.O_Date = O_Date
-            self.O_Status = O_Status
-            self.O_Phone = O_Phone
-            self.O_Address = O_Address
-            self.O_Time = O_Time
-            self.O_MemberName = O_MemberName
-     
-    data1 =  run_query_fetchone(f"SELECT O_Id,O_MemberId,O_Date,O_Status,O_Phone,O_Address,O_Time,(select Name from member where Id=O_MemberId ) as O_MemberName  FROM orders where O_Id='{id}' ")     
-    info = order(str(data1[0]),str(data1[1]),library.FormatDate(data1[2]) ,str(data1[3]),str(data1[4]),str(data1[5]),str(data1[6]),str(data1[7])) 
-    Dt =  run_query_fetchall(f"SELECT O_ProductId,(select P_Name from product where O_ProductId=P_Id  ) as O_Productname, O_Productcount FROM ordersdetail where O_Id='{id}' ") 
-    return render_template('bn/orderdetail.html',info=info,data=Dt)
 
 
 
-@back.route('/bn/member')
-def member():
-
-    return render_template('bn/member.html') 
 
 
-@back.route('/bn/bank')
-def bank():
-    Dt =  run_query_fetchall("SELECT Bankid,Bankaccount,Bankname  FROM bank where Status=true") 
-    return render_template('bn/bank.html',data=Dt) 
 
 
-@back.route('/savebank',methods=["POST"])
-def savebank():
-    if request.method == 'POST':
-        BankId = request.form["BankId"]
-        Bankname = request.form["Bankname"]
-        Bankaccount = request.form["Bankaccount"]
-     
-      
-      
-        
-        sql = "INSERT INTO bank (Bankid, Bankname,Bankaccount,Status) VALUE (%s, %s, %s, %s)"
-        executes = (BankId, Bankname,Bankaccount,True)
-        run_query_commit(sql, executes)
-
-        Dt =  run_query_fetchall("SELECT *  FROM bank where Status=true") 
-        return render_template('bn/bank.html',data=Dt) 
 
 
-@back.route('/editbank',methods=["POST"])
-def editbank():
-   if request.method == 'POST':
-        BankId = request.form["BankId"]
-        Bankname = request.form["Bankname"]
-        Bankaccount = request.form["Bankaccount"]
-        
-            
-        sql =f"update  bank  set Bankid={BankId},Bankname={Bankname},Bankaccount={Bankaccount}  where BankId={BankId} "
-      
-        run_query_commit(sql, "")
-    
-        Dt =  run_query_fetchall(f"SELECT *  FROM bank where Status=true") 
-        return render_template('bn/bank.html',data=Dt) 
+
 
 @back.route('/bn/runing')
 def runing():
   
     return render_template('bn/runing.html')
 
-@back.route('/bn/ordrerhistory')
-def ordrerhistory():
-    Dt =  run_query_fetchall("SELECT  O_Id ,(select Name from member  where Id=O_MemberId) as Name,O_Date FROM orders where O_Status='2'") 
-    return render_template('bn/ordrerhistory.html',data= Dt)

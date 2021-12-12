@@ -11,7 +11,7 @@
 
             <div align="right">
 
-                <!-- <a  href="{{ url_for('back.productadd')}}" class="btn btn-primary" >เพิ่มสินค้า</a>-->
+              
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     เพิ่มพนักงาน
                 </button>
@@ -55,7 +55,7 @@
                             </td>
                         </tr>
                         <!-- Modal -->
-                        <form name="editproductgroup" action="{{ url_for('back.editproductgroup')}}" method="POST"
+                        <form name="editproductgroup" action="{{ url_for('empolyee.editempolyees')}}" method="POST"
                             enctype="multipart/form-data" class="form-horizontal">
                             <div class="modal fade" id="exampleModal{{x.0}}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel1" aria-hidden="true">
@@ -258,7 +258,7 @@
 
 
     <!-- Modal -->
-    <form name="saveemployee" action="{{ url_for('back.saveemployee')}}" method="POST" enctype="multipart/form-data"
+    <form name="saveemployee" action="{{ url_for('empolyee.saveemployee')}}" method="POST" enctype="multipart/form-data"
         class="form-horizontal">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
