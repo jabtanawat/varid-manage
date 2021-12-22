@@ -19,7 +19,7 @@
         <!-- sidebar -->
         <nav id="sidebar_wrapper">
             <!-- sidebar brand -->
-            <a href="/bn" class="sidebar_brand text-center text-decoration-none">
+            <a href="/" class="sidebar_brand text-center text-decoration-none">
                 <img src="/static/image/logo-D.png" class="picture_brand"><span class="align-middle ms-1">ashboard</span>
             </a>
             <!-- sidebar content -->
@@ -27,7 +27,7 @@
                 <ul id="sidemenu_content" class="navbar-nav align-self-stretch">
                     <li class="sidebar_header">MAIN</li>
                     <li>
-                        <a href="/bn" class="nav-link">
+                        <a href="/" class="nav-link">
                             <i class='bx bx-tachometer sidebar_icon'></i><span>Overview</span>
                         </a>
                     </li>
@@ -51,13 +51,13 @@
                             <ul class="navbar-nav submenu_box">
                                 <li><a href="/category" class="nav-link">หมวดหมู่</a></li>
                                 <li><a href="/product" class="nav-link">สินค้า</a></li>
-                                <li><a href="/empolyee" class="nav-link">พนักงาน</a></li>
+                                <li><a href="/employee" class="nav-link">พนักงาน</a></li>
                                 <li><a href="/member" class="nav-link">สมาชิก</a></li>
                                 <li><a href="/bank" class="nav-link">ธนาคาร</a></li>
                             </ul>
                         </div>
                     </li>
-                    <li class="has-sub">
+                    <!--<li class="has-sub">
                         <a href="#collapse4" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
                             <i class='bx bx-message-alt-detail sidebar_icon'></i><span>รายงาน</span>
                         </a>
@@ -68,7 +68,6 @@
                             </ul>
                         </div>
                     </li>
-
                     <li class="has-sub">
                         <a href="#collapse5" role="button" class="nav-link collapsed text-left" data-bs-toggle="collapse">
                             <i class='bx bx-cog sidebar_icon'></i><span>ตั้งค่าระบบ</span>
@@ -76,10 +75,10 @@
                         <div class="menu collapse" id="collapse5">
                             <ul class="navbar-nav submenu_box">
                                 <li><a href="#" class="nav-link">กำหนดผู้ใช้งาน</a></li>
-                                <!--<li><a href="{{url_for('back.runing')}}" class="nav-link">กำหนดเลขที่เอกสาร</a></li>-->
+                                <li><a href="{{url_for('back.runing')}}" class="nav-link">กำหนดเลขที่เอกสาร</a></li>
                             </ul>
                         </div>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
         </nav>

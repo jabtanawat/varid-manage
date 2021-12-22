@@ -8,6 +8,13 @@
 
 {% block content %}
 
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Dashboard</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">Overview</li>
+    </ol>
+</nav>
+
 <!-- Overview -->
 
 <div class="row">
@@ -68,7 +75,7 @@
         toggle: true
     })
 
-    var navLink = document.querySelector('#sidemenu_content a[href="/bn"]')
+    var navLink = document.querySelector('#sidemenu_content a[href="/"]')
     navLink.classList.add("active");
 
     showGraphLoan()

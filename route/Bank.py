@@ -4,46 +4,66 @@ import library
 
 banks = Blueprint('bank', __name__)
 
+# =================================================================================
+# === BANK GET
+# =================================================================================
+
 @banks.route('/bank')
-def bank():
-    Dt =  run_query_fetchall("SELECT Bankid,Bankaccount,Bankname  FROM bank where Status=true") 
-    return render_template('bank.html',data=Dt) 
+def index() :
+    sql = "SELECT AccountCode, AccountName, BankName FROM Bank"
+    dt =  run_query_fetchall(sql) 
+    return render_template('Bank/Index.html', data = dt) 
 
+@banks.route('/bank/frmbank')
+def frmbank() :
+    return render_template('Bank/FrmBank.html') 
 
-@banks.route('/bank/savebank',methods=["POST"])
-def savebank():
-    if request.method == 'POST':
-        BankId = request.form["BankId"]
-        Bankname = request.form["Bankname"]
-        Bankaccount = request.form["Bankaccount"]
-     
-      
-      
-        
-        sql = "INSERT INTO bank (Bankid, Bankname,Bankaccount,Status) VALUE (%s, %s, %s, %s)"
-        executes = (BankId, Bankname,Bankaccount,True)
-        run_query_commit(sql, executes)
+# =================================================================================
+# === BANK POST
+# =================================================================================
 
-        Dt =  run_query_fetchall("SELECT *  FROM bank where Status=true") 
-        return render_template('bank.html',data=Dt) 
+@banks.route('/bank/savedata', methods=["POST"])
+def savedata():
+    if request.args.get('mode') :
+        mode = str(request.args.get('mode'))
+    else :
+        return jsonify("error")
+    Status = False
+    if request.method == 'POST' :     
+        AccountCode = request.form["AccountCode"]   
+        AccountName = request.form["AccountName"]        
+        BankName = request.form["BankName"]
+        if request.form["Status"] == "true" :
+            Status = True
+        # ===== Add
+        if mode == "add" :
+            row = library.TableWhere("Bank", "AccountCode", AccountCode)
+            if row > 0 :                
+                return jsonify("error")
+            sql = "INSERT INTO Bank (AccountCode, AccountName, BankName, Status) VALUE (%s, %s, %s, %s)"
+            executes = (AccountCode, AccountName, BankName, Status)
+            run_query_commit(sql, executes)
+            flash("บันทึกข้อมูลเรียบร้อย !", "success-save")
+            return jsonify("success")
+        # ===== Edit
+        elif mode == "edit" :
+            sql ="UPDATE Bank SET AccountName = %s, BankName = %s, Status = %s  where AccountCode = %s"
+            executes = (AccountName, BankName, Status, AccountCode)
+            run_query_commit(sql, executes)
+            flash("แก้ไขข้อมูลเรียบร้อย !", "success-save")
+            return jsonify("success")
+        else :
+            return jsonify("error")
+    return jsonify("error")
 
-
-@banks.route('/editbank',methods=["POST"])
-def editbank():
-   if request.method == 'POST':
-        BankId = request.form["BankId"]
-        Bankname = request.form["Bankname"]
-        Bankaccount = request.form["Bankaccount"]
-        
-            
-        sql =f"update  bank  set Bankid={BankId},Bankname={Bankname},Bankaccount={Bankaccount}  where BankId={BankId} "
-      
-        run_query_commit(sql, "")
-    
-        Dt =  run_query_fetchall(f"SELECT *  FROM bank where Status=true") 
-        return render_template('bank.html',data=Dt) 
-
-@banks.route('/runing')
-def runing():
-  
-    return render_template('runing.html')
+@banks.route('/bank/deletedata/<id>', methods=["POST", "GET"])
+def deletedata(id):
+    row = library.TableWhere("Payment", "AccountBank", id)
+    if row > 0 :                
+        flash("ไม่สามารถทำรายการได้ !", "error")
+        return redirect('/bank')
+    sql = "DELETE FROM Bank where AccountCode = %s"
+    executes = (id)
+    run_query_commit(sql, executes)
+    flash("ลบข้อมูลเรียบร้อย !", "success-save")
+    return redirect('/bank')

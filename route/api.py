@@ -46,3 +46,23 @@ def member(id):
     sql = f"select MemberId, Name, Tel, Email, Address, User, Pass from Member where MemberId = '{id}'"
     data =  run_query_fetchone(sql)
     return jsonify(data)
+
+# =================================================================================
+# === BANK API
+# =================================================================================
+
+@api.route('/api/bank/<id>', methods=['POST', 'GET'])
+def bank(id):
+    sql = f"SELECT AccountCode, AccountName, BankName, IF(Status, 'true', 'false') AS Status FROM Bank WHERE AccountCode = '{id}'"
+    data =  run_query_fetchone(sql)
+    return jsonify(data)
+
+# =================================================================================
+# === EMPLOYEE API
+# =================================================================================
+
+@api.route('/api/employee/<id>', methods=['POST', 'GET'])
+def employee(id):
+    sql = f"SELECT EmpId, PreFix, F_Name, L_Name, User, Pass, IF(Status, 'true', 'false') AS Status FROM Employee WHERE EmpId = '{id}'"
+    data =  run_query_fetchone(sql)
+    return jsonify(data)
