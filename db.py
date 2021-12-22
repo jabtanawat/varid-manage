@@ -29,12 +29,12 @@ def run_query_commit(sql, string):
     mysql_connect()
     with conn.cursor() as cur:
         cur.execute(sql, (string))
-        cur.commit()
+        conn.commit()
     conn.close()
 
 def run_commit(sql):
     mysql_connect()
     with conn.cursor() as cur:
         cur.execute(sql)
-        cur.commit()
+        conn.commit()
     conn.close()
