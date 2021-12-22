@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request,session, flash, jsonify
-from ssh_db import run_query_fetchall, run_query_commit, run_query_fetchone
+from db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library
 from decimal import Decimal
 

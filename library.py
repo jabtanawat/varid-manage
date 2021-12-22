@@ -1,5 +1,5 @@
 from datetime import datetime
-from ssh_db import run_query_fetchall, run_query_commit, run_query_fetchone
+from db import run_query_fetchall, run_query_commit, run_query_fetchone
 
 def ConvertDate(aDate):
   d1 = aDate.strftime("%d")

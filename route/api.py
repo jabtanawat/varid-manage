@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from ssh_db import run_query_fetchall, run_query_commit, run_query_fetchone
+from db import run_query_fetchall, run_query_commit, run_query_fetchone
 from library import *
 
 api = Blueprint('api', __name__)
