@@ -25,37 +25,36 @@ def FormatTime(aDate)  :
     d1 = aDate.strftime("%H:%M:%S")
     return d1
 
-# ===== GET เลขรันนิ่ง
-def Getrunning(name) :
-  data =  run_query_fetchone(f"SELECT * FROM runing where Docid = '{name}'")
-  r = str(data[2])
-  F = str(data[1])
-  A = "" 
-  B = "" 
-  C = "" 
-  D = "" 
-  running = ""
-  for i  in range(int(len(r))):    
-    if r[i:i+1] == "0":
-      A +="0"
-    else:
-      B += str(r[i:i+1])      
-    if  B == "" :        
-      D = run1(r)
-      running = F + D + "1"
-    else:
-      C = str(int(B)+ 1) 
-      running = F + A + C
-  return running
+# ===== GET RUNNING
 
-# ===== SET เลขรันนิ่ง
-def SetRunning(name, running):
-  data =  run_query_fetchone(f"SELECT * FROM runing where Docid = '{name}'")
-  length = len(running) - len(data[2])
-  number = running[length:]
-  sql = "update runing set Idruning = %s where Docid = %s"
-  executes = (number, name)
-  run_query_commit(sql, executes)
+def GETRUNNING(name) :
+  DocRunning = ""
+  RunLength = ""
+  sql = f"SELECT Name, Front, Running, IF(AutoRun, 'true', 'false') AS AutoRun FROM Running WHERE Name = '{name}'"
+  info =  run_query_fetchone(sql)
+  Running = info[2]
+  if info[3] == "true" :
+    if Running != "NULL" :
+      for i in range(int(len(Running))) :
+        RunLength += "0"
+      Number = int(Running) + 1
+      Length = int(len(RunLength))      
+      #DocRunning = info[1] + '{:0>5}'.format(Number)
+      DocRunning = info[1] + str(Number).zfill(Length)
+  return DocRunning  
+
+# ===== SET RUNNING
+
+def SETRUNNING(name, running):
+  sql = f"SELECT Name, Front, Running, IF(AutoRun, 'true', 'false') AS AutoRun FROM Running WHERE Name = '{name}'"
+  info =  run_query_fetchone(sql)
+  if info[3] == "true" :
+    Length = len(running) - len(info[2])
+    Number = running[Length:]
+    print(Number)
+    sql = "UPDATE Running SET Running = %s WHERE Name = %s"
+    executes = (Number, name)
+    run_query_commit(sql, executes)
 
 def TableWhere(FROM, VALUE, WHERE):
   sql = f"select * from {FROM} where {VALUE} = '{WHERE}'"

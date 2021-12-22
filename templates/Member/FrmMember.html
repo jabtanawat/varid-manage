@@ -1,0 +1,195 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    .feedback-sm {
+        font-size: .84rem;
+        padding-top: 10px;
+        color: red;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">ทะเบียน</a></li>
+        <li class="breadcrumb-item"><a href="/member" class="text-decoration-none">สมาชิก</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">เพิ่มสมาชิก</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <p><span class="me-2"><i class='bx bx-window-alt'></i></span><span class="name_page">เพิ่มสมาชิก</span></p>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <form method="POST" name="group">
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">รหัส</label>
+                        {% if DocRunning != "" %}
+                            <input type="text" name="txtid" id="txtid" class="form-control" value="{{DocRunning}}" readonly>
+                        {% else %}
+                            <input type="text" name="txtid" id="txtid" class="form-control">
+                        {% endif %}                        
+                        <span class="feedback-id feedback-sm"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">ชื่อสมาชิก</label>
+                        <input type="text" name="txtname" id="txtname" class="form-control">
+                        <span class="feedback-name feedback-sm"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">เบอร์โทร</label>
+                        <input type="text" name="txttel" id="txttel" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">Email</label>
+                        <input type="text" name="txtemail" id="txtemail" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">ที่อยู่</label>
+                        <textarea class="form-control" name="txtaddress" id="txtaddress" rows="3"></textarea>                  
+                    </div> 
+                    <p class="text-center col-form-label-sm fw-bold mt-3">Username/Password</p> 
+                    <hr>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">Username</label>
+                        <input type="text" name="txtusername" id="txtusername" class="form-control">
+                        <span class="feedback-username feedback-sm"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="col-form-label col-form-label-sm">Password</label>
+                        <input type="password" name="txtpassword" id="txtpassword" class="form-control">
+                        <span class="feedback-password feedback-sm"></span>
+                    </div>
+                </form>                
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-sm btn-success button-save"><span class="me-2"><i class='bx bx-save'></i></span>บันทึก</button>
+                </div>     
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script>
+    var myCollapse = document.getElementById('collapse2')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/member"]')
+    navLink.classList.add("active");
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get('mode')
+    if (mode == 'edit') {
+        let id = params.get('id')
+        let url = `/api/member/${id}`
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const pages = document.querySelectorAll(".name_page");
+            for (i = 0; i < pages.length; i++) {
+                pages[i].innerHTML = "แก้ไขสมาชิก"
+            }
+            if (data.length > 0){
+                document.getElementById('txtid').value = data[0]
+                document.getElementById('txtid').setAttribute('readonly', true)
+                document.getElementById('txtname').value = data[1]   
+                document.getElementById('txttel').value = data[2]
+                document.getElementById('txtemail').value = data[3]
+                document.getElementById('txtaddress').value = data[4]
+                document.getElementById('txtusername').value = data[5]
+                document.getElementById('txtpassword').value = data[6]
+            }               
+        });
+    }
+
+    document.querySelector('.button-save').addEventListener('click', function(){
+        let valida = 0
+
+        let id = document.getElementById('txtid').value
+        let name = document.getElementById('txtname').value
+        let tel = document.getElementById('txttel').value
+        let email = document.getElementById('txtemail').value
+        let address = document.getElementById('txtaddress').value
+        let username = document.getElementById('txtusername').value
+        let password = document.getElementById('txtpassword').value
+
+        if (id == ""){
+            document.querySelector('.feedback-id').innerHTML = ""
+            document.querySelector('.feedback-id').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-id').innerHTML = "" }
+
+        if (name == ""){
+            document.querySelector('.feedback-name').innerHTML = ""
+            document.querySelector('.feedback-name').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-name').innerHTML = "" }
+
+        if (username == ""){
+            document.querySelector('.feedback-username').innerHTML = ""
+            document.querySelector('.feedback-username').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-username').innerHTML = "" }
+
+        if (password == ""){
+            document.querySelector('.feedback-password').innerHTML = ""
+            document.querySelector('.feedback-password').append('กรุณากรอกข้อมูล')
+            valida = 1
+        }else{ document.querySelector('.feedback-password').innerHTML = "" }
+
+        if (valida == 1) { return; }
+
+        var data = new FormData();
+        data.append('Id', id);
+        data.append('Name', name);
+        data.append('Tel', tel);
+        data.append('Email', email);
+        data.append('Address', address);
+        data.append('User', username);
+        data.append('Pass', password);
+
+        let option = {
+            method: 'POST',
+            body: data,
+        }        
+
+        Swal.fire({
+            text: "ต้องการบันทึกข้อมูลหรือไม่ ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                fetch(`/member/savedata?mode=${mode}`, option)
+                .then(response => response.json())
+                .then(data => {
+                    if (data == 'success'){
+                        window.location.href = "/member"
+                    }else{
+                        Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
+                    }      
+                });
+            }
+        })            
+    })
+</script>
+
+{% endblock %}

@@ -36,3 +36,13 @@ def product(id):
     sql = f"select Id, Name, CategoryId, CONVERT(Price, CHAR), IF(Active, 'true', 'false') AS Active, Description from Product where Id = '{id}'"
     data =  run_query_fetchone(sql)
     return jsonify(data)
+
+# =================================================================================
+# === MEMBER API
+# =================================================================================
+
+@api.route('/api/member/<id>', methods=['POST', 'GET'])
+def member(id):
+    sql = f"select MemberId, Name, Tel, Email, Address, User, Pass from Member where MemberId = '{id}'"
+    data =  run_query_fetchone(sql)
+    return jsonify(data)
