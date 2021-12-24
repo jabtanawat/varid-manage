@@ -43,19 +43,13 @@
                     </div>                     
                     <div class="mb-2">
                         <label class="col-form-label col-form-label-sm">ธนาคาร</label>
-                        <select class="form-select" id="txtBankName" name="txtBankName">
+                        <select class="form-select" id="txtBankId" name="txtBankId">
                             <option value="" selected>เลือกธนาคาร</option>
-                            <option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</option>
-                            <option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</option>
-                            <option value="ธนาคารกรุงไทย">ธนาคารกรุงไทย</option>
-                            <option value="ธนาคารทหารไทยธนชาต">ธนาคารทหารไทยธนชาต</option>
-                            <option value="ธนาคารไทยพาณิชย์">ธนาคารไทยพาณิชย์</option>
-                            <option value="ธนาคารกรุงศรีอยุธยา">ธนาคารกรุงศรีอยุธยา</option>
-                            <option value="ธนาคารเกียรตินาคินภัทร">ธนาคารเกียรตินาคินภัทร</option>
-                            <option value="ธนาคารซีไอเอ็มบีไทย">ธนาคารซีไอเอ็มบีไทย</option>
-                            <option value="ธนาคารออมสิน">ธนาคารออมสิน</option>                            
+                            {% for x in data %}
+                            <option value="{{x.0}}">{{x.1}}</option>
+                            {% endfor %}                         
                         </select>
-                        <span class="feedback-bankname feedback-sm"></span>
+                        <span class="feedback-bankid feedback-sm"></span>
                     </div>
                     <div class="mb-2">
                         <div class="form-check form-switch">
@@ -101,7 +95,7 @@
                 document.getElementById('txtAccountCode').value = data[0]
                 document.getElementById('txtAccountCode').setAttribute('readonly', true)
                 document.getElementById('txtAccountName').value = data[1]   
-                document.getElementById('txtBankName').value = data[2]     
+                document.getElementById('txtBankId').value = data[2]     
                 if (data[3] == 'true') {
                     document.getElementsByName('txtStatus')[0].checked = true
                 }else{
@@ -116,7 +110,7 @@
         
         let accountcode = document.getElementById('txtAccountCode').value
         let accountname = document.getElementById('txtAccountName').value
-        let bankname = document.getElementById('txtBankName').value
+        let bankid = document.getElementById('txtBankId').value
         let status = document.getElementsByName('txtStatus')[0].checked 
 
         if (accountcode == ""){
@@ -131,18 +125,18 @@
             valida = 1
         }else{ document.querySelector('.feedback-accountname').innerHTML = "" }        
 
-        if (bankname == ""){
-            document.querySelector('.feedback-bankname').innerHTML = ""
-            document.querySelector('.feedback-bankname').append('กรุณากรอกข้อมูล')
+        if (bankid == ""){
+            document.querySelector('.feedback-bankid').innerHTML = ""
+            document.querySelector('.feedback-bankid').append('กรุณากรอกข้อมูล')
             valida = 1
-        }else{ document.querySelector('.feedback-bankname').innerHTML = "" }
+        }else{ document.querySelector('.feedback-bankid').innerHTML = "" }
 
         if (valida == 1) { return; }
 
         var data = new FormData();        
         data.append('AccountName', accountname);
         data.append('AccountCode', accountcode);
-        data.append('BankName', bankname);
+        data.append('BankId', bankid);
         data.append('Status', status);
 
         let option = {

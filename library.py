@@ -62,6 +62,12 @@ def TableWhere(FROM, VALUE, WHERE):
   length = len(row)
   return length
 
+def TableWhereInfo(FROM, VALUE, WHERE):
+  sql = f"select * from {FROM} where {VALUE} = '{WHERE}'"
+  row = run_query_fetchall(sql)
+  length = len(row)
+  return length
+
 def run1(r):
   D = ""
   for i in range (int(len(r))-1):

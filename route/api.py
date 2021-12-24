@@ -53,7 +53,7 @@ def member(id):
 
 @api.route('/api/bank/<id>', methods=['POST', 'GET'])
 def bank(id):
-    sql = f"SELECT AccountCode, AccountName, BankName, IF(Status, 'true', 'false') AS Status FROM Bank WHERE AccountCode = '{id}'"
+    sql = f"SELECT AccountCode, AccountName, BankId, IF(Status, 'true', 'false') AS Status FROM Bank WHERE AccountCode = '{id}'"
     data =  run_query_fetchone(sql)
     return jsonify(data)
 

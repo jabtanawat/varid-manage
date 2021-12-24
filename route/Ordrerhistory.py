@@ -3,14 +3,26 @@ from db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library
 from datetime import datetime
 
-ordrerhistorys = Blueprint('ordrerhistory', __name__)
+orderhistorys = Blueprint('orderhistory', __name__)
 
-@ordrerhistorys.route('/ordrerhistory')
-def ordrerhistory():
-    Dt =  run_query_fetchall("SELECT  O_Id ,(select Name from member  where MemberId=O_MemberId) as Name,O_Date FROM orders where O_Status='2'") 
-    return render_template('ordrerhistory.html',data= Dt)
+# =================================================================================
+# === ORDER HISTORY GET
+# =================================================================================
 
-@ordrerhistorys.route('/orderdetail/<id>')
+@orderhistorys.route('/orderhistory')
+def orderhistory():
+    sql = "SELECT OrderId, Name, DocDate, DocTime, Status FROM Orders LEFT JOIN Member ON Orders.MemberId = Member.MemberId WHERE Status IN (5)"
+    dt_now = run_query_fetchall(sql) 
+    dt =[]
+    for x in dt_now :
+        order = x[0]
+        menber = x[1]
+        date = str(library.FormatDate(x[2])) + ' ' + str(x[3])
+        status = x[4]
+        dt.append([order, menber, date, status])
+    return render_template('/OrderHistory/Index.html', data = dt)
+
+@orderhistorys.route('/orderdetail/<id>')
 def orderdetail(id):
     class order:
         def __init__(self,O_Id, O_MemberId, O_Date,O_Status,O_Phone,O_Address,O_Time,O_MemberName):

@@ -5,10 +5,13 @@ from datetime import datetime
 
 orders = Blueprint('order', __name__)
 
+# =================================================================================
+# === ORDER GET
+# =================================================================================
+
 @orders.route('/order')
 def Index() :     
-    #sql = f"SELECT OrderId, MemberId, DocTime, Status FROM Orders WHERE Status <> 0 and DocDate = '{datetime.today().strftime('%Y-%m-%d')}'"    
-    sql = f"SELECT OrderId, Name, DocDate, DocTime, Status FROM Orders LEFT JOIN Member ON Orders.MemberId = Member.MemberId WHERE Status IN (1, 2)"  
+    sql = f"SELECT OrderId, Name, DocDate, DocTime, Status FROM Orders LEFT JOIN Member ON Orders.MemberId = Member.MemberId WHERE Status IN (1, 2, 3)"  
     dt_now =  run_query_fetchall(sql) 
     dt1 =[]
     for x in dt_now :
@@ -17,28 +20,42 @@ def Index() :
         date = str(library.FormatDate(x[2])) + ' ' + str(x[3])
         status = x[4]
         dt1.append([order, menber, date, status])
-    sql = f"SELECT OrderId, MemberId, DocTime, Status FROM Orders where Status =  0 and DocDate='{datetime.today().strftime('%Y-%m-%d')}'"
-    print(sql)
-    Dt1 =  run_query_fetchall(sql) 
+    sql = f"SELECT OrderId, Name, DocDate, DocTime, Status FROM Orders LEFT JOIN Member ON Orders.MemberId = Member.MemberId WHERE Status IN (4)"
+    dt_last =  run_query_fetchall(sql) 
+    dt2 =[]
+    for x in dt_last :
+        order = x[0]
+        menber = x[1]
+        date = str(library.FormatDate(x[2])) + ' ' + str(x[3])
+        status = x[4]
+        dt2.append([order, menber, date, status])
     DateNow = library.FormatDate(datetime.now()) 
     TimeNow = library.FormatTime(datetime.now())
-    return render_template('Order/Index.html', data = dt1, data2 = Dt1, datenow = DateNow, timenow = TimeNow)
+    return render_template('Order/Index.html', data = dt1, data2 = dt2, datenow = DateNow, timenow = TimeNow)
 
-@orders.route('/order/orderdetail/<id>')
-def orderdetail(id):
-    class order:
-        def __init__(self, O_Id, O_MemberId, O_Date, O_Status, O_Phone, O_Address, O_Time, O_MemberName):
-            self.O_Id = O_Id
-            self.O_MemberId = O_MemberId
-            self.O_Date = O_Date
-            self.O_Status = O_Status
-            self.O_Phone = O_Phone
-            self.O_Address = O_Address
-            self.O_Time = O_Time
-            self.O_MemberName = O_MemberName     
-    data1 =  run_query_fetchone(f"SELECT OrderId, MemberId, DocDate, Status, Phone, Address, DocTime, MemberId as MemberName  FROM Orders where OrderId='{id}' ")     
-    info = order(str(data1[0]),str(data1[1]),library.FormatDate(data1[2]) ,str(data1[3]),str(data1[4]),str(data1[5]),str(data1[6]),str(data1[7])) 
-    Dt =  run_query_fetchall(f"SELECT OrderId, ProductId as ProductName, Amount FROM OrderSub where OrderId='{id}' ") 
-    return render_template('/Order/OrderDetail.html',info = info, data = Dt)
+# =================================================================================
+# === ORDER POST
+# =================================================================================
+
+@orders.route('/order/confirmorder', methods=["POST"])
+def confirm() :
+    if request.method == 'POST' :     
+        OrderId = request.form["OrderId"]
+        Status = 4
+        Transport = request.form["Transport"]
+        TransportName = request.form["TransportName"]
+        sql = f"SELECT Status FROM Orders WHERE OrderId = '{OrderId}'"
+        info = run_query_fetchone(sql)
+        if info[0] == 2 or info[0] == 3 :
+            if Transport != "" or TransportName != ""  :
+                Status = 5
+            sql ="UPDATE Orders SET Status = %s, Transport = %s, TransportName = %s WHERE OrderId = %s"
+            executes = (Status, Transport, TransportName, OrderId)
+            run_query_commit(sql, executes)
+            flash(f"ยืนยันคำสั่งซื้อลเขที่ {OrderId} เรียยบร้อยคะ" , "success-save")
+            return jsonify("success")
+        return jsonify("error")
+    return jsonify("error")
+
 
 

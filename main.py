@@ -7,10 +7,11 @@ from route.Bank import banks
 from route.Empolyee import empolyees
 from route.Member import members
 from route.Order import orders
-from route.Ordrerhistory import ordrerhistorys
+from route.OrdrerHistory import orderhistorys
 
 from route.api import api
-from datetime import time, timedelta
+from route.Modals import modals
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -22,8 +23,10 @@ app.register_blueprint(empolyees)
 app.register_blueprint(banks)
 app.register_blueprint(members)
 app.register_blueprint(orders)
-app.register_blueprint(ordrerhistorys)
+app.register_blueprint(orderhistorys)
 app.register_blueprint(api)
+app.register_blueprint(modals)
+
 
 @back.errorhandler(404)
 def not_found(error):

@@ -1,0 +1,85 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="/static/css/tables.css" />
+<style>
+  .card {
+    border-color: #EDF2F9;
+  }
+
+  hr {
+    color: #6C757D;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">รายการสั่งซื้อ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ประวัติคำสั่งซื้อ</li>
+    </ol>
+  </nav>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <p class="mb-0"><span class="me-2"><i class='bx bx-shopping-bag'></i></span> ประวัติคำสั่งซื้อ</p>   
+      </div>        
+      <hr>   
+      <!-- tab content -->
+      <div class="table-responsive">
+        <table id="data-table-basic1" style="width:100%" class="table">
+          <thead>
+            <tr class="text-center">
+              <th style="width:20%">เลขที่ออเดอร์</th>
+              <th style="width:20%">ชื่อผู้สั่งซื้อ</th>            
+              <th style="width:20%">วัน/เวลา</th>     
+              <th style="width:10%">สถานะ</th>            
+              <th style="width:10%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in data %}
+            <tr>
+              <td>{{x[0]}}</td>
+              <td>{{x[1]}}</td>
+              <td class="text-center">{{x[2]}}</td> 
+              {% if x[3] == 1 %}
+                <td class="text-center text-danger">รอแจ้งชำระเงิน</td>
+              {% else %}
+                <td class="text-center text-success">ชำระเงินแล้ว</td>
+              {% endif %}                
+              <td class="text-center">
+                <button class="btn btn-primary btn-sm">ดูข้อมูล</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <script src="/static/plugins/DataTables/DataTables-1.11.2/js/jquery.dataTables.min.js"></script>
+  <script>
+    var myCollapse = document.getElementById('collapse1')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/orderhistory"]')
+    navLink.classList.add("active");
+
+    $('#data-table-basic1').DataTable({
+      "displayLength": 10,
+    });
+  </script>
+
+{% endblock %}

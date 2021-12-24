@@ -1,17 +1,21 @@
 {% extends 'shares/lyback_dashboard.html' %}
 
 {% block styles %}
-<link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/jquery.dataTables.min.css" />
-<link rel="stylesheet" href="/static/css/tables.css" />
-<style>
-  .card {
-    border-color: #EDF2F9;
-  }
-
-  hr {
-    color: #6C757D;
-  }
-</style>
+  <link rel="stylesheet" href="/static/plugins/DataTables/DataTables-1.11.2/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="/static/css/tables.css" />
+  <style>
+    .card {
+      border-color: #EDF2F9;
+    }
+    hr {
+      color: #6C757D;
+    }
+    .feedback-sm {
+      font-size: .84rem;
+      padding-top: 10px;
+      color: red;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -65,7 +69,7 @@
                     <td class="text-center text-success">ชำระเงินแล้ว</td>
                   {% endif %}                
                   <td class="text-center">
-                    <a class="btn btn-warning btn-sm" role="button" href="/order/orderdetail/{{x[0]}}">ตรวจสอบ</a>
+                    <button class="btn btn-warning btn-sm" onclick="modalClick('{{x.0}}')">ยืนยันคำสั่งซื้อ</button>
                   </td>
                 </tr>
                 {% endfor %}
@@ -75,12 +79,12 @@
         </div>
         <div class="tab-pane fade" id="Or2" role="tabpanel" aria-labelledby="profile-tab">
           <div class="table-responsive">
-            <table id="dtproduct" style="width:100%" class="table table-bordered">
+            <table id="data-table-basic2" style="width:100%" class="table">
               <thead>
                 <tr>
-                  <th style="width:20%">รหัสสั่งซื้อ</th>
+                  <th style="width:20%">เลขที่ออเดอร์</th>
                   <th style="width:20%">ชื่อผู้สั่งซื้อ</th>            
-                  <th style="width:20%">เวลาสั่งซื้อ</th>     
+                  <th style="width:20%">วัน/เวลา</th>     
                   <th style="width:10%">สถานะ</th>            
                   <th style="width:10%"></th>
                 </tr>
@@ -91,9 +95,13 @@
                   <td>{{x[0]}}</td>
                   <td>{{x[1]}}</td>
                   <td>{{x[2]}}
-                  </td> <td style="color:green">ตรวจสอบแล้ว</td>
-                  <td>
-                    <a  href="{{ url_for('order.productdetail',id= x[0] )}}" target="_blank">ดูข้อมูล</a>
+                  {% if x[3] == 4 %}
+                    <td class="text-center text-primary">เตรียมจัดส่ง</td>
+                  {% else %}
+                    <td class="text-center text-success">จัดส่งแล้ว</td>
+                  {% endif %} 
+                  <td class="text-center">
+                    <button class="btn btn-primary btn-sm" onclick="modalClick('{{x.0}}')">จัดส่งสินค้า</button>
                   </td>
                 </tr>
               {% endfor %}
@@ -105,13 +113,29 @@
     </div>
   </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="body_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="d-flex justify-content-between">
+            <label class="col-form-label-sm"><i class='bx bxs-shopping-bags'></i><span class="ms-2">ข้อมูลคำสั่งซื้อ</span></label>
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+          </div>
+          <hr>
+          <div class="areaBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}
 
-
-
 {% block scripts %}
+
   <script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <script src="/static/plugins/DataTables/DataTables-1.11.2/js/jquery.dataTables.min.js"></script>
+  <script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <script>
     var myCollapse = document.getElementById('collapse1')
     var bsCollapse = new bootstrap.Collapse(myCollapse, {
@@ -124,17 +148,120 @@
     $('#data-table-basic1').DataTable({
       "displayLength": 10,
     });
+
+    $('#data-table-basic2').DataTable({
+      "displayLength": 10,
+    });
+
+    var myModal = new bootstrap.Modal(document.getElementById('body_modal'), {
+      keyboard: false
+    })
+
+    function modalClick(id) {
+      var data = new FormData();        
+      data.append('OrderId', id);
+
+      let option = { method: 'POST', body: data}
+      fetch('/modal/order', option)
+      .then(response => response.json())
+      .then(data => {
+        var myModalEl = document.getElementById('body_modal')
+        var modalBody = document.querySelector(".areaBody")
+        modalBody.innerHTML = data.htmlresponse
+        myModal.toggle()
+      });
+    }
+
+    function confirm(id) {
+      let valida = 0
+
+      let transport = document.getElementById('txttransport').value
+      let transportname = document.getElementById('txttransportname').value
+
+      if (valida == 1) { return; }
+
+      var data = new FormData();        
+      data.append('OrderId', id);
+      data.append('Transport', transport);
+      data.append('TransportName', transportname);
+
+      let option = {
+        method: 'POST',
+        body: data,
+      }
+
+      fetch('/order/confirmorder', option)
+      .then(response => response.json())
+      .then(data => {
+          if (data == 'success'){
+              window.location.href = "/order"
+          }else{
+              Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
+          }      
+      });
+    }
+
+    function confirmTransport(id) {
+      let valida = 0
+
+      let transport = document.getElementById('txttransport').value
+      let transportname = document.getElementById('txttransportname').value
+
+      if (transport == ""){
+        document.querySelector('.feedback-transport').innerHTML = ""
+        document.querySelector('.feedback-transport').append('กรุณากรอกข้อมูล')
+        valida = 1
+      }else{ document.querySelector('.feedback-transport').innerHTML = "" }
+
+      if (transportname == ""){
+        document.querySelector('.feedback-transportname').innerHTML = ""
+        document.querySelector('.feedback-transportname').append('กรุณากรอกข้อมูล')
+        valida = 1
+      }else{ document.querySelector('.feedback-transportname').innerHTML = "" }
+
+      if (valida == 1) { return; }
+
+      var data = new FormData();        
+      data.append('OrderId', id);
+      data.append('Transport', transport);
+      data.append('TransportName', transportname);
+
+      let option = {
+        method: 'POST',
+        body: data,
+      }
+
+      fetch('/order/confirmorder', option)
+      .then(response => response.json())
+      .then(data => {
+          if (data == 'success'){
+              window.location.href = "/order"
+          }else{
+              Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
+          }      
+      });
+    }
+
   </script>
 
-<script>
-  $(document).ready(function initialize() {
-      "use strict";
-      $('.thai-datepicker').datepicker({
-          language: 'th-th',
-          format: 'dd/mm/yyyy',
-          today: true,
-          autoclose: true
-      });
-  });
-</script>
+  {% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        {% if category == 'success-save' %}
+        <script>
+            Swal.fire({icon: 'success',text: '{{msg}}',showConfirmButton: false, timer: 1500})
+        </script>
+        {% elif category == 'success-delete' %}
+        <script>
+            Swal.fire({icon: 'success',text: '{{msg}}',showConfirmButton: false, timer: 1500})
+        </script>
+        {% else %}
+        <script>
+            Swal.fire({icon: 'error',text: '{{msg}}',showConfirmButton: false, timer: 1500})
+        </script>
+        {% endif %}        
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
 {% endblock %}

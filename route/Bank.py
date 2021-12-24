@@ -10,13 +10,15 @@ banks = Blueprint('bank', __name__)
 
 @banks.route('/bank')
 def index() :
-    sql = "SELECT AccountCode, AccountName, BankName FROM Bank"
+    sql = "SELECT AccountCode, AccountName, CD_Bank.Name FROM Bank LEFT JOIN CD_Bank ON Bank.BankId = CD_Bank.Id"
     dt =  run_query_fetchall(sql) 
     return render_template('Bank/Index.html', data = dt) 
 
 @banks.route('/bank/frmbank')
 def frmbank() :
-    return render_template('Bank/FrmBank.html') 
+    sql = "SELECT Id, Name FROM CD_Bank"
+    dt =  run_query_fetchall(sql)
+    return render_template('Bank/FrmBank.html', data = dt) 
 
 # =================================================================================
 # === BANK POST
@@ -32,7 +34,7 @@ def savedata():
     if request.method == 'POST' :     
         AccountCode = request.form["AccountCode"]   
         AccountName = request.form["AccountName"]        
-        BankName = request.form["BankName"]
+        BankId = request.form["BankId"]
         if request.form["Status"] == "true" :
             Status = True
         # ===== Add
@@ -40,15 +42,15 @@ def savedata():
             row = library.TableWhere("Bank", "AccountCode", AccountCode)
             if row > 0 :                
                 return jsonify("error")
-            sql = "INSERT INTO Bank (AccountCode, AccountName, BankName, Status) VALUE (%s, %s, %s, %s)"
-            executes = (AccountCode, AccountName, BankName, Status)
+            sql = "INSERT INTO Bank (AccountCode, AccountName, BankId, Status) VALUE (%s, %s, %s, %s)"
+            executes = (AccountCode, AccountName, BankId, Status)
             run_query_commit(sql, executes)
             flash("บันทึกข้อมูลเรียบร้อย !", "success-save")
             return jsonify("success")
         # ===== Edit
         elif mode == "edit" :
-            sql ="UPDATE Bank SET AccountName = %s, BankName = %s, Status = %s  where AccountCode = %s"
-            executes = (AccountName, BankName, Status, AccountCode)
+            sql ="UPDATE Bank SET AccountName = %s, BankId = %s, Status = %s  where AccountCode = %s"
+            executes = (AccountName, BankId, Status, AccountCode)
             run_query_commit(sql, executes)
             flash("แก้ไขข้อมูลเรียบร้อย !", "success-save")
             return jsonify("success")
