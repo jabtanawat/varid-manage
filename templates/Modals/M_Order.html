@@ -29,21 +29,46 @@
     </div>
     <div class="mb-2">
         <label class="col-form-label col-form-label-sm">เลขที่ขนส่ง</label>
-        <input type="text" name="transport" id="txttransport" class="form-control">
+        <input type="text" name="transport" id="txttransport" class="form-control" value="{{data.5}}">
         <span class="feedback-transport feedback-sm"></span>
     </div>
     <div class="mb-2">
         <label class="col-form-label col-form-label-sm">บริษัทขนส่ง</label>
-        <select class="form-select" name="transportname" id="txttransportname">
-            <option value="" selected>-- กรุณาเลือก --</option>      
+        <select class="form-select" name="transportname" id="txttransportname">            
+            <option value="">-- กรุณาเลือก --</option>     
+            {% if data.6 == "Kerry" %}
+            <option value="Kerry" selected>Kerry</option>
+            {% else %}
             <option value="Kerry">Kerry</option>
+            {% endif %}
+
+            {% if data.6 == "Flash" %}
+            <option value="Flash" selected>Flash</option>
+            {% else %}
             <option value="Flash">Flash</option>
+            {% endif %}
+
+            {% if data.6 == "NinjaVan" %}
+            <option value="NinjaVan" selected>NinjaVan</option>
+            {% else %}
             <option value="NinjaVan">NinjaVan</option>
+            {% endif %}
+
+            {% if data.6 == "J&T" %}
+            <option value="J&T" selected>J&T</option>
+            {% else %}
             <option value="J&T">J&T</option>
-            <option value="EMS">EMS</option>            
+            {% endif %}
+
+            {% if data.6 == "EMS" %}
+            <option value="EMS" selected>EMS</option>
+            {% else %}
+            <option value="EMS">EMS</option>
+            {% endif %}
         </select>
         <span class="feedback-transportname feedback-sm"></span>
     </div>
+    {% if data.1 != 5 %}
     <p class="text-primary col-form-label-sm">
         * ถ้าลูกค้า <strong>"ชำระเงินแล้ว"</strong> หรือ <strong>"ชำระเงินปลายทาง"</strong> ต้องกรอกเลขที่ขนส่ง และบริษัทขนส่งด้วยค่ะ
     </p>
@@ -55,5 +80,6 @@
         {% else %}
         <button type="button" class="btn btn-sm btn-success btn-save" onclick="confirm('{{data.0}}')"><span class="me-2"><i class='bx bx-check'></i></span>ยืนยันคำสั่งซื้อ</button>
         {% endif %}
-    </div>     
+    </div> 
+    {% endif %}    
 </form>

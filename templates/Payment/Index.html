@@ -19,14 +19,14 @@
   <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#" class="text-decoration-none">รายการสั่งซื้อ</a></li>
-        <li class="breadcrumb-item active" aria-current="page">ประวัติคำสั่งซื้อ</li>
+        <li class="breadcrumb-item active" aria-current="page">รายการชำระเงิน</li>
     </ol>
   </nav>
 
   <div class="card">
     <div class="card-body">
       <div class="d-flex justify-content-between">
-        <p class="mb-0"><span class="me-2"><i class='bx bx-shopping-bag'></i></span> ประวัติคำสั่งซื้อ</p>   
+        <p class="mb-0"><span class="me-2"><i class='bx bx-shopping-bag'></i></span> รายการชำระเงิน</p>   
       </div>        
       <hr>   
       <!-- tab content -->
@@ -34,28 +34,26 @@
         <table id="data-table-basic1" style="width:100%" class="table">
           <thead>
             <tr class="text-center">
-              <th style="width:20%">เลขที่ออเดอร์</th>
-              <th style="width:30%">ชื่อผู้สั่งซื้อ</th>            
-              <th style="width:20%">วัน/เวลา</th>     
-              <th style="width:20%">สถานะ</th>            
+              <th style="width:15%">วันที่ชำระเงิน</th>   
+              <th style="width:15%">เลขที่ชำระเงิน</th>
+              <th style="width:15%">เลขที่ออเดอร์</th>
+              <th style="width:auto">ชื่อผู้สั่งซื้อ</th>        
+              <th style="width:15%">ราคา</th>
               <th style="width:10%"></th>
             </tr>
           </thead>
           <tbody>
             {% for x in data %}
-            <tr>
-              <td>{{x[0]}}</td>
-              <td>{{x[1]}}</td>
-              <td class="text-center">{{x[2]}}</td> 
-              {% if x[3] == 5 %}
-                <td class="text-center text-success">จัดส่งแล้ว</td>
-              {% else %}
-                <td class="text-center text-success">เรียบร้อย</td>
-              {% endif %}                
-              <td class="text-center">
-                <button class="btn btn-primary btn-sm" onclick="modalClick('{{x.0}}')">ดูข้อมูล</button>
-              </td>
-            </tr>
+              <tr>
+                <td>{{x[0]}}</td>
+                <td>{{x[1]}}</td>
+                <td>{{x[2]}}</td>
+                <td>{{x[3]}}</td>
+                <td class="text-end">{{x[4]}}</td>
+                <td class="text-center">
+                  <button class="btn btn-primary btn-sm" onclick="modalClick('{{x[1]}}')">ดูข้อมูล</button>
+                </td>
+              </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -69,7 +67,7 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="d-flex justify-content-between">
-            <label class="col-form-label-sm"><i class='bx bxs-shopping-bags'></i><span class="ms-2">ข้อมูลคำสั่งซื้อ</span></label>
+            <label class="col-form-label-sm fw-bold"><i class='bx bx-wallet-alt'></i><span class="ms-2">ข้อมูลการชำระเงิน</span></label>
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
           </div>
           <hr>
@@ -90,7 +88,7 @@
         toggle: true
     })
 
-    var navLink = document.querySelector('#sidemenu_content a[href="/orderhistory"]')
+    var navLink = document.querySelector('#sidemenu_content a[href="/payment"]')
     navLink.classList.add("active");
 
     $('#data-table-basic1').DataTable({
@@ -103,10 +101,10 @@
 
     function modalClick(id) {
       var data = new FormData();        
-      data.append('OrderId', id);
+      data.append('PaymentId', id);
 
       let option = { method: 'POST', body: data}
-      fetch('/modal/order', option)
+      fetch('/modal/payment', option)
       .then(response => response.json())
       .then(data => {
         var myModalEl = document.getElementById('body_modal')

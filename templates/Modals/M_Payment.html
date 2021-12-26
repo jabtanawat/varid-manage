@@ -1,0 +1,70 @@
+<form method="post" name="confirmOrder">
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">เลขที่ชำระเงิน</label>
+        <input type="text" class="form-control" value="{{data.0}}">
+    </div>
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">เลขที่ออเดอร์</label>
+        <input type="text" class="form-control" name="orderid" id="txtorderid" value="{{data.1}}">
+    </div>
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">ชื่อผู้ชำระเงิน</label>
+        <input type="text" class="form-control" value="{{data.2}}">
+    </div>
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">เลขที่บัญชี</label>
+        <input type="text" class="form-control" value="{{data.3}}">
+    </div>
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">ราคา</label>
+        <input type="text" class="form-control text-end" value="{{data.4}}">
+    </div>
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <label class="col-form-label col-form-label-sm fw-bold">วันที่</label>
+            <input type="text" class="form-control" value="{{data.5}}">
+        </div>     
+        <div class="col-sm-3">
+            <label class="col-form-label col-form-label-sm fw-bold">ชั่วโมง</label>
+            <input type="text" class="form-control" value="{{data.6}}">
+        </div>   
+        <div class="col-sm-3">
+            <label class="col-form-label col-form-label-sm fw-bold">นาที</label>
+            <input type="text" class="form-control" value="{{data.7}}">
+        </div>   
+    </div>
+    <div class="mb-2">
+        {% if data.9 == 1 %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input mt-2" type="radio" name="R" id="R1" value="1" checked>
+            <label class="form-check-label col-form-label-sm" for="R1">ชำระเงินด้วยการโอน</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input mt-2" type="radio" name="R" id="R1" value="1">
+            <label class="form-check-label col-form-label-sm" for="R1">ชำระเงินด้วยการโอน</label>
+        </div>
+        {% endif %}
+
+        {% if data.9 == 2 %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input mt-2" type="radio" name="R" id="R2" value="2" checked>
+            <label class="form-check-label col-form-label-sm" for="R2">ชำระเงินปลายทาง</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input mt-2" type="radio" name="R" id="R2" value="2">
+            <label class="form-check-label col-form-label-sm" for="R2">ชำระเงินปลายทาง</label>
+        </div>
+        {% endif %} 
+    </div>
+    <div class="mb-2">
+        <label class="col-form-label col-form-label-sm fw-bold">หลักฐานการเงินโอนเงิน</label>
+        {% if data.8 == "" %}
+        <img id="blah" src="/static/image/nopic.jpg" class="img-thumbnail mt-3">
+        {% else %}
+        <img id="blah" src="http://192.168.1.10:5011/static/image/payment/PY00002.jpg" class="img-thumbnail mt-3">
+        {% endif %} 
+        
+    </div> 
+</form>

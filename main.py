@@ -8,6 +8,7 @@ from route.Empolyee import empolyees
 from route.Member import members
 from route.Order import orders
 from route.OrdrerHistory import orderhistorys
+from route.Payment import payment
 
 from route.api import api
 from route.Modals import modals
@@ -24,6 +25,7 @@ app.register_blueprint(banks)
 app.register_blueprint(members)
 app.register_blueprint(orders)
 app.register_blueprint(orderhistorys)
+app.register_blueprint(payment)
 app.register_blueprint(api)
 app.register_blueprint(modals)
 

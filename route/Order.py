@@ -52,7 +52,25 @@ def confirm() :
             sql ="UPDATE Orders SET Status = %s, Transport = %s, TransportName = %s WHERE OrderId = %s"
             executes = (Status, Transport, TransportName, OrderId)
             run_query_commit(sql, executes)
-            flash(f"ยืนยันคำสั่งซื้อลเขที่ {OrderId} เรียยบร้อยคะ" , "success-save")
+            flash(f"ยืนยันคำสั่งซื้อลเขที่ {OrderId} เรียบร้อยแล้วค่ะ" , "success-save")
+            return jsonify("success")
+        return jsonify("error")
+    return jsonify("error")
+
+@orders.route('/order/confirmTransport', methods=["POST"])
+def confirmTransport() :
+    if request.method == 'POST' :     
+        OrderId = request.form["OrderId"]
+        Status = 5
+        Transport = request.form["Transport"]
+        TransportName = request.form["TransportName"]
+        sql = f"SELECT Status FROM Orders WHERE OrderId = '{OrderId}'"
+        info = run_query_fetchone(sql)
+        if info[0] == 4 :
+            sql ="UPDATE Orders SET Status = %s, Transport = %s, TransportName = %s WHERE OrderId = %s"
+            executes = (Status, Transport, TransportName, OrderId)
+            run_query_commit(sql, executes)
+            flash(f"จัดส่งคำสั่งซื้อลเขที่ {OrderId} เรียบร้อยแล้วค่ะ" , "success-save")
             return jsonify("success")
         return jsonify("error")
     return jsonify("error")

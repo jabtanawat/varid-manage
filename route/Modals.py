@@ -12,6 +12,14 @@ modals = Blueprint('modals', __name__)
 def order():
     if request.method == 'POST' :
         id = request.form["OrderId"]   
-        sql = f"SELECT OrderId, Status, MemberName, Phone, Address FROM Orders WHERE OrderId = '{id}'"
+        sql = f"SELECT OrderId, Status, MemberName, Phone, Address, Transport, TransportName FROM Orders WHERE OrderId = '{id}'"
         data =  db.run_query_fetchone(sql)
         return jsonify({'htmlresponse': render_template('/Modals/M_Order.html', data = data)})
+
+@modals.route('/modal/payment', methods=['POST', 'GET'])
+def payment():
+    if request.method == 'POST' :
+        id = request.form["PaymentId"]   
+        sql = f"SELECT DocNo, OrderId, Name, AccountBank, Price, DocDate, Hour, Minute, FileName, PayType FROM Payment WHERE DocNo = '{id}'"
+        data =  db.run_query_fetchone(sql)
+        return jsonify({'htmlresponse': render_template('/Modals/M_Payment.html', data = data)})
