@@ -20,6 +20,10 @@ def frmcategory():
     category = run_query_fetchall("SELECT Id, Name FROM Category") 
     return render_template('Product/FrmProduct.html', data = category) 
 
+@product.route('/product/frmimage/<id>')
+def frmimage(id):
+    return render_template('Product/FrmImage.html') 
+
 # =================================================================================
 # === สินค้า POST
 # =================================================================================
@@ -32,26 +36,31 @@ def savedata():
         return jsonify("error")
     Active = False
     if request.method == 'POST':
-        Id = request.form["Id"]
-        Name = request.form["Name"]
-        CategoryId = request.form["CategoryId"]
-        Price = request.form["Price"].replace(",", "")
-        if request.form["Active"] == "true" :
-            Active = True
-        Description = request.form["Description"]
+        Id = request.form["txtId"]
+        #Name = request.form["Name"]
+        #CategoryId = request.form["CategoryId"]
+        #Price = request.form["Price"].replace(",", "")
+        #if request.form["Active"] == "true" :
+        #    Active = True
+        Description = request.form["txtDescription"]
+        #ImageFile = request.files["ImageFile"]
+        #print(ImageFile)
+        print(Description)
         if mode == "add" :
             row = library.TableWhere("Product", "Id", Id)
             if row > 0 :                
                 return jsonify("error")
             sql = "INSERT INTO Product (Id, Name, Price, Active, Description, CategoryId) VALUE (%s, %s, %s, %s, %s, %s)"
-            executes = (Id, Name, Price, Active, Description, CategoryId)
-            run_query_commit(sql, executes)
+            #executes = (Id, Name, Price, Active, Description, CategoryId)
+            #run_query_commit(sql, executes)
             flash("บันทึกข้อมูลเรียบร้อย !", "success-save")
-            return jsonify("success")
+            #return jsonify("success")
+            category = run_query_fetchall("SELECT Id, Name FROM Category") 
+            return render_template('Product/FrmProduct.html', data = category) 
         elif mode == "edit" :
             sql ="update Product set Name = %s, Price = %s, Active = %s, Description = %s, CategoryId= %s where Id = %s"
-            executes = (Name, Price, Active, Description, CategoryId, Id)
-            run_query_commit(sql, executes)
+            #executes = (Name, Price, Active, Description, CategoryId, Id)
+            #run_query_commit(sql, executes)
             flash("แก้ไขข้อมูลเรียบร้อย !", "success-save")
             return jsonify("success")
         else :
@@ -59,9 +68,10 @@ def savedata():
 
 @product.route('/product/deletedata/<id>', methods=["POST", "GET"])
 def deletedata(id):
-    #row = library.TableWhere("Product", "P_CategoryId", id)
-    #if row > 0 :                
-    #    return jsonify("error")
+    row = library.TableWhere("OrderSub", "ProductId", id)
+    if row > 0 :         
+        flash("ไม่สามารถทำรายการได้ !", "error")       
+        return redirect('/product')
     sql = "delete from Product where Id = %s"
     executes = (id)
     run_query_commit(sql, executes)

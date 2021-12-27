@@ -1,0 +1,46 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    .feedback-sm {
+        font-size: .84rem;
+        padding-top: 10px;
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">ทะเบียน</a></li>
+        <li class="breadcrumb-item"><a href="/product" class="text-decoration-none">สินค้า</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">รูปภาพสินค้า</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <p><span class="me-2"><i class='bx bx-window-alt'></i></span><span class="name_page">รูปภาพสินค้า</span></p>
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script>
+    var myCollapse = document.getElementById('collapse2')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
+    navLink.classList.add("active");    
+</script>
+
+{% endblock %}

@@ -2,11 +2,6 @@
 
 {% block styles %}
 <style>
-    .ck-editor__editable {
-        min-height: 250px;
-    }
-</style>
-<style>
     .card {
         border-color: #EDF2F9;
     }
@@ -14,6 +9,29 @@
         font-size: .84rem;
         padding-top: 10px;
         color: red;
+    }
+    .ck-editor__editable {
+        min-height: 250px;
+    }
+    .head-area {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .image-preview {
+        width: 200px;
+        min-height: 200px;
+        border: 1px solid #E3EBF6;
+        border-radius: 0rem;
+    }
+
+    .preview__image {
+        z-index: 2;
+        width: 100%;
+        height: 200px;
+        border-radius: 0.3rem;
     }
 </style>
 {% endblock %}
@@ -31,30 +49,29 @@
 <div class="card">
     <div class="card-body">
         <p><span class="me-2"><i class='bx bx-window-alt'></i></span><span class="name_page">เพิ่มสินค้า</span></p>
-        <form name="saveproduct" method="POST">
+        <form name="product" method="POST" enctype="multipart/form-data">
             <div class="row justify-content-center">
-                <div class="col-lg-8 col-md-10">
+                <div class="col-lg-6 col-md-9">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">รหัสสินค้า</label>
-                                <input type="text" class="form-control form-control-sm" id="txtId" name="txtId">
+                                <input type="text" class="form-control" id="txtId" name="txtId">
                                 <span class="feedback-id feedback-sm"></span>
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">ชื่อสินค้า</label>
-                                <input type="text" class="form-control form-control-sm" id="txtName" name="txtName">
+                                <input type="text" class="form-control" id="txtName" name="txtName">
                                 <span class="feedback-name feedback-sm"></span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="col-form-label col-form-label-sm">ราคา (บาท)</label>
+                                <input type="text" class="form-control text-end" id="txtPrice" name="txtPrice" placeholder="0.00">
+                                <span class="feedback-price feedback-sm"></span>
+                            </div>
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">หมวดสินค้า</label>
-                                <select class="form-select form-select-sm" aria-label="Default select example" id="txtCategoryId" name="txtCategoryId">
+                                <select class="form-select" id="txtCategoryId" name="txtCategoryId">
                                     <option value="" selected>-- เลือก --</option>
                                     {% for sel in data %}
                                     <option value="{{sel[0]}}" > {{sel[1]}}</option>
@@ -62,26 +79,33 @@
                                 </select>
                                 <span class="feedback-categoryid feedback-sm"></span>
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="col-form-label col-form-label-sm">ราคา (บาท)</label>
-                                <input type="text" class="form-control form-control-sm text-end" id="txtPrice" name="txtPrice" placeholder="0.00">
-                                <span class="feedback-price feedback-sm"></span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input mt-2" type="checkbox" role="switch" id="txtActive" name="txtActive" checked>
+                                    <label class="form-check-label col-form-label-sm" for="txtActive">ใช้งาน</label>
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <!-- IMAGE -->
+                            <div class="head-area d-flex justify-content-center">
+                                <div class="panel-area mt-4">
+                                    <div class="image-preview">
+                                        <img src="/static/image/nopic.jpg" alt="" class="preview__image" />
+                                    </div>
+                                    <input name="ImageFile" id="inputFile" type="file" class="form-control-file mt-4" hidden>
+                                    <div class="d-grid gap-1 mt-3">
+                                        <button type="button" class="btn btn-sm btn-warning" id="btn-file"><i class="far fa-images"></i>&nbsp;CHOOSE A FILE</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>      
-                    <div class="mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input mt-2" type="checkbox" role="switch" id="txtActive" name="txtActive" checked>
-                            <label class="form-check-label col-form-label-sm" for="txtActive">ใช้งาน</label>
-                        </div> 
-                    </div>                          
+                    </div>                                             
                     <div class="mb-3">
                         <label class="col-form-label col-form-label-sm">รายละเอียดเพิ่มเติม</label>
-                        <div id="txtDescription" name="txtDescription"></div>
+                        <textarea name="txtDescription" id="txtDescription"></textarea>
                     </div>
-                    <div class="text-center mt-4">
+                    <div class="text-center my-4">
                         <button type="button" class="btn btn-sm btn-success button-save"><span class="me-2"><i class='bx bx-save'></i></span>บันทึก</button>
                     </div>  
                 </div>
@@ -102,6 +126,25 @@
 
     var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
     navLink.classList.add("active");
+
+    document.getElementById('btn-file').addEventListener('click', () => {
+        const input_file = document.getElementById('inputFile')
+        input_file.click()
+    })
+
+    document.getElementById('inputFile').addEventListener('change', function () {
+        const previewImage = document.querySelector('.preview__image')
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function () {
+                previewImage.setAttribute('src', this.result)
+            });
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.setAttribute('src', '/static/image/nopic.jpg')
+        }
+    });
 
     const toCurrency = (number, currency, lang = undefined) => Intl.NumberFormat(lang, {style : 'currency', currency, currencyDisplay: "code" }).format(number).replace(currency, "").trim()
 
@@ -185,6 +228,8 @@
 
         if (valida == 1) { return; }
 
+        var files =  document.getElementById('inputFile').files[0]
+
         var data = new FormData();
         data.append('Id', Id);
         data.append('Name', Name);
@@ -192,9 +237,13 @@
         data.append('Price', Price);
         data.append('Active', Active);
         data.append('Description', Description);
+        data.append('ImageFile', files);
 
         let option = {
             method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data; charset=UTF-8'
+            },
             body: data,
         }        
 
@@ -208,8 +257,11 @@
             cancelButtonText: 'No',
         }).then((result) => {
             if (result.isConfirmed) {
+
+                document.product.action = `/product/savedata?mode=${mode}`
+                document.product.submit();
                 
-                fetch(`/product/savedata?mode=${mode}`, option)
+                /*fetch(`/product/savedata?mode=${mode}`, option)
                 .then(response => response.json())
                 .then(data => {
                     if (data == 'success'){                        
@@ -217,7 +269,7 @@
                     }else{
                         Swal.fire({icon: 'error', text: 'ไม่สามารถบันทึกได้ !'})
                     }      
-                });
+                });*/
             }
         })            
     })
