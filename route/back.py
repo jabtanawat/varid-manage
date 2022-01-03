@@ -31,7 +31,15 @@ back = Blueprint('back', __name__)
 ##run_query_commit("INSERT INTO product (id, name) VALUE (%s, %s)", executes)
 
 @back.route('/')
-def index():
+def index() :
+    SQLDATENOW = f"SELECT COUNT(OrderId) FROM Orders WHERE DocDate = '{library.ConvertDate(datetime.now())}'"
+    INFODATENOW = run_query_fetchone(SQLDATENOW)
+    SQLDATEALL = f"SELECT COUNT(OrderId) FROM Orders"
+    INFODATEALL = run_query_fetchone(SQLDATEALL)
+    SQLSUMNOW = f"SELECT IFNULL(SUM(Price), 0) FROM Orders WHERE DocDate = '{library.ConvertDate(datetime.now())}'"
+    INFOSUMNOW = run_query_fetchone(SQLSUMNOW)
+    SQLSUMALL = f"SELECT IFNULL(SUM(Price), 0) FROM Orders"
+    INFOSUMALL = run_query_fetchone(SQLSUMALL)
     return render_template('index.html')
 
 @back.route('/bn/login')

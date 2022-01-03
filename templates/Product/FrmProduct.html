@@ -24,7 +24,7 @@
         width: 200px;
         min-height: 200px;
         border: 1px solid #E3EBF6;
-        border-radius: 0rem;
+        border-radius: 0.3rem;
     }
 
     .preview__image {
@@ -56,22 +56,22 @@
                         <div class="col-md-8">
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">รหัสสินค้า</label>
-                                <input type="text" class="form-control" id="txtId" name="txtId">
+                                <input type="text" class="form-control" id="txtId" name="Id">
                                 <span class="feedback-id feedback-sm"></span>
                             </div>
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">ชื่อสินค้า</label>
-                                <input type="text" class="form-control" id="txtName" name="txtName">
+                                <input type="text" class="form-control" id="txtName" name="Name">
                                 <span class="feedback-name feedback-sm"></span>
                             </div>
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">ราคา (บาท)</label>
-                                <input type="text" class="form-control text-end" id="txtPrice" name="txtPrice" placeholder="0.00">
+                                <input type="text" class="form-control numberonly text-end" id="Price" name="Price" value="0.00" placeholder="0.00">
                                 <span class="feedback-price feedback-sm"></span>
                             </div>
                             <div class="mb-3">
                                 <label class="col-form-label col-form-label-sm">หมวดสินค้า</label>
-                                <select class="form-select" id="txtCategoryId" name="txtCategoryId">
+                                <select class="form-select" id="txtCategoryId" name="CategoryId">
                                     <option value="" selected>-- เลือก --</option>
                                     {% for sel in data %}
                                     <option value="{{sel[0]}}" > {{sel[1]}}</option>
@@ -81,8 +81,8 @@
                             </div>
                             <div class="mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input mt-2" type="checkbox" role="switch" id="txtActive" name="txtActive" checked>
-                                    <label class="form-check-label col-form-label-sm" for="txtActive">ใช้งาน</label>
+                                    <input class="form-check-input mt-2" type="checkbox" role="switch" id="Active" name="Active" checked>
+                                    <label class="form-check-label col-form-label-sm" for="Active">ใช้งาน</label>
                                 </div> 
                             </div> 
                         </div>
@@ -118,6 +118,7 @@
 {% block scripts %}
 <script src="/static/plugins/ckeditor5/ckeditor.js"></script>
 <script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/static/plugins/numeral/numeral.js"></script>
 <script>
     var myCollapse = document.getElementById('collapse2')
     var bsCollapse = new bootstrap.Collapse(myCollapse, {
@@ -146,11 +147,11 @@
         }
     });
 
-    const toCurrency = (number, currency, lang = undefined) => Intl.NumberFormat(lang, {style : 'currency', currency, currencyDisplay: "code" }).format(number).replace(currency, "").trim()
+    /*const toCurrency = (number, currency, lang = undefined) => Intl.NumberFormat(lang, {style : 'currency', currency, currencyDisplay: "code" }).format(number).replace(currency, "").trim()
 
-    document.getElementById("txtPrice").addEventListener("blur", function(){
+    document.getElementById("Price").addEventListener("blur", function(){
         this.value = toCurrency(this.value, 'USD', 'en-us')
-    })
+    })*/
 
     var myEditor;
 
@@ -175,20 +176,24 @@
         .then(data => {
             const pages = document.querySelectorAll(".name_page");
             for (i = 0; i < pages.length; i++) {
-                pages[i].innerHTML = "แก้ไขหมวดหมู่"
+                pages[i].innerHTML = "แก้ไขสินค้า"
             }
             if (data.length > 0){
                 document.getElementById('txtId').value = data[0]
                 document.getElementById('txtId').setAttribute('readonly', true)
                 document.getElementById('txtName').value = data[1]       
                 document.getElementById('txtCategoryId').value = data[2]       
-                document.getElementById('txtPrice').value = toCurrency(data[3], 'USD', 'en-us')   
+                document.getElementById('Price').value = numeral(data[3]).format('0,0.00')
                 if (data[4] == 'true') {
-                    document.getElementsByName('txtActive')[0].checked = true
+                    document.getElementsByName('Active')[0].checked = true
                 }else{
-                    document.getElementsByName('txtActive')[0].checked = false
+                    document.getElementsByName('Active')[0].checked = false
                 }
                 myEditor.setData(data[5]);
+                if (data[6]) {
+                    const previewImage = document.querySelector('.preview__image')
+                    previewImage.setAttribute('src', '/static/image/product/' + data[6])
+                }
             }              
         });
     }
@@ -198,9 +203,9 @@
         let Id = document.getElementById('txtId').value
         let Name = document.getElementById('txtName').value
         let CategoryId = document.getElementById('txtCategoryId').value
-        let Price = document.getElementById('txtPrice').value
-        let Active = document.getElementsByName('txtActive')[0].checked 
-        let Description = myEditor.getData()
+        let Price = document.getElementById('Price').value
+        //let Active = document.getElementsByName('Active')[0].checked 
+        //let Description = myEditor.getData()
 
         if (Id == ""){
             document.querySelector('.feedback-id').innerHTML = ""
@@ -226,26 +231,7 @@
             valida = 1
         }else{ document.querySelector('.feedback-price').innerHTML = "" }
 
-        if (valida == 1) { return; }
-
-        var files =  document.getElementById('inputFile').files[0]
-
-        var data = new FormData();
-        data.append('Id', Id);
-        data.append('Name', Name);
-        data.append('CategoryId', CategoryId);
-        data.append('Price', Price);
-        data.append('Active', Active);
-        data.append('Description', Description);
-        data.append('ImageFile', files);
-
-        let option = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data; charset=UTF-8'
-            },
-            body: data,
-        }        
+        if (valida == 1) { return; }    
 
         Swal.fire({
             text: "ต้องการบันทึกข้อมูลหรือไม่ ?",
@@ -274,7 +260,35 @@
         })            
     })
 
+    // ===== format 0.00
+
+    document.querySelector(".numberonly").addEventListener("keypress", function(){
+        const e = event.keyCode
+        if (e >= 48 && e <= 57 || e === 8 || e === 13 || e === 46) {
+            event.returnValue = true
+        } else {
+            event.returnValue = false
+        }
+    })
+
+    document.querySelector(".numberonly").addEventListener("blur", function(){
+        const number = this.value
+        this.value = numeral(number).format('0,0.00')
+    })
+
 </script>
+
+{% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+        {% for category, msg in messages %}
+            {% if category == 'error' %}
+            <script>
+                Swal.fire({icon: 'error', text: '{{msg}}'})
+            </script>
+            {% endif %}        
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 
 <script>

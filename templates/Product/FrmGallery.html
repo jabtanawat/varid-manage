@@ -1,0 +1,174 @@
+{% extends 'shares/lyback_dashboard.html' %}
+
+{% block styles %}
+<style>
+    .card {
+        border-color: #EDF2F9;
+    }
+    .feedback-sm {
+        font-size: .84rem;
+        padding-top: 10px;
+        color: red;
+    }
+    .head-area {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    .image-preview {
+        width: 200px;
+        min-height: 200px;
+        border: 1px solid #E3EBF6;
+        border-radius: 0.3rem;
+    }
+    .preview__image {
+        z-index: 2;
+        width: 100%;
+        height: 200px;
+        border-radius: 0.3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none">ทะเบียน</a></li>
+        <li class="breadcrumb-item"><a href="/product" class="text-decoration-none">สินค้า</a></li>
+        <li class="breadcrumb-item active name_page" aria-current="page">แกลลอรี่สินค้า</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-body">
+        <p><span class="me-2"><i class="far fa-images"></i></span><span class="name_page">แกลลอรี่สินค้า</span></p>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="row">
+                    <div class="col-md-8">
+                        {% if DATA|length > 0 %}    
+                            {% for x in DATA %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <img src="/static/image/product/{{x.2}}" alt="..." style="width:170px;height:170px;">
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            No. {{ loop.index }}
+                                        </div>
+                                        <div class="ms-3">
+                                            <form action="/product/delete/gallery" method="POST">
+                                                <input type="text" name="No" value="{{x.0}}" hidden />
+                                                <input type="text" name="ProductId" value="{{x.1}}" hidden />
+                                                <input type="text" name="ImageFile" value="{{x.2}}" hidden />
+                                                <button type="submit" class="btn btn-danger"><i class='bx bxs-trash-alt'></i></button>
+                                            </form>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                             
+                            {% endfor %}                                        
+                        {% else %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <span class="text-danger">ไม่มีรูปภาพในแกลลอรี่.</span>
+                            </div>
+                        </div>                  
+                        {% endif %}                       
+                    </div>
+                    <div class="col-md-4 order-first">
+                        <!-- IMAGE -->                        
+                        <div class="head-area d-flex justify-content-center">
+                            <div class="panel-area">
+                                <div class="image-preview">
+                                    <img src="/static/image/nopic.jpg" alt="" class="preview__image" />
+                                </div>
+                                <form action="/product/savegallery" name="frmgallery" method="post" enctype="multipart/form-data">
+                                    <input type="text" name="id" value="{{ID}}" hidden>
+                                    <input type="file" name="ImageFile" id="inputFile" class="form-control-file mt-4" hidden>                                 
+                                    <div class="d-grid gap-1 mt-3">
+                                        <button type="button" class="btn btn-sm btn-warning" id="btn-file">CHOOSE A FILE</button>
+                                    </div>
+                                    <div class="d-grid gap-1 mt-3">
+                                        <button type="button" class="btn btn-sm btn-success btn-save"><i class='bx bx-save'></i>&nbsp;บันทึกรูปภาพ</button>
+                                    </div>
+                                </form>  
+                            </div>
+                        </div>                                             
+                    </div>
+                </div>                                             
+            </div>
+        </div>
+        <span class="text-danger">*** สามารถเพิ่มรูปภาพได้สูงสุดทั้งหมด 4 รูปภาพ</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script>
+    var myCollapse = document.getElementById('collapse2')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        toggle: true
+    })
+
+    var navLink = document.querySelector('#sidemenu_content a[href="/product"]')
+    navLink.classList.add("active");    
+
+    document.getElementById('btn-file').addEventListener('click', () => {
+        const input_file = document.getElementById('inputFile')
+        input_file.click()
+    })
+
+    document.getElementById('inputFile').addEventListener('change', function () {
+        const previewImage = document.querySelector('.preview__image')
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function () {
+                previewImage.setAttribute('src', this.result)
+            });
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.setAttribute('src', '/static/image/nopic.jpg')
+        }
+    });
+
+    document.querySelector('.btn-save').addEventListener('click', function(){
+        Swal.fire({
+            text: "ต้องการบันทึกรูปภาพนี้หรือไม่ ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                document.frmgallery.submit();
+            }
+        })            
+    })
+</script>
+
+{% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+        {% for category, msg in messages %}
+            {% if category == 'success' %}
+            <script>
+                Swal.fire({icon: 'success', text: '{{msg}}'})
+            </script>
+            {% else %}
+            <script>
+                Swal.fire({icon: 'error', text: '{{msg}}'})
+            </script>
+            {% endif %}        
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% endblock %}

@@ -33,7 +33,7 @@ def category(id):
 
 @api.route('/api/product/<id>', methods=['POST', 'GET'])
 def product(id):
-    sql = f"select Id, Name, CategoryId, CONVERT(Price, CHAR), IF(Active, 'true', 'false') AS Active, Description from Product where Id = '{id}'"
+    sql = f"SELECT Id, Name, CategoryId, CONVERT(Price, CHAR), IF(Active, 'true', 'false') AS Active, Description, ImageFile FROM Product WHERE Id = '{id}'"
     data =  run_query_fetchone(sql)
     return jsonify(data)
 
