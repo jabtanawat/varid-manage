@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request,session, flash, jsonify
+from flask import Blueprint, render_template, redirect, request, flash, jsonify, make_response
 from db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library
 from decimal import Decimal
@@ -11,19 +11,31 @@ members = Blueprint('member', __name__)
 
 @members.route('/member')
 def member() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     sql = "SELECT MemberId, Name FROM Member"
     dt =  run_query_fetchall(sql)    
-    return render_template('Member/Index.html', data = dt) 
+    return render_template('Member/Index.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], data = dt) 
 
 @members.route('/member/frmmember')
 def frmmember() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     if request.args.get('mode') :
         mode = str(request.args.get('mode'))
     if mode == "add" :
         DocRunning = library.GETRUNNING("Member")
-        return render_template('Member/FrmMember.html', DocRunning = DocRunning) 
+        return render_template('Member/FrmMember.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], DocRunning = DocRunning) 
     else :
-        return render_template('Member/FrmMember.html', DocRunning = "") 
+        return render_template('Member/FrmMember.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], DocRunning = "") 
 
 # =================================================================================
 # === MEMBER POST

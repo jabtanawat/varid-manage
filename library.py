@@ -1,5 +1,6 @@
 from datetime import datetime
 from db import run_query_fetchall, run_query_commit, run_query_fetchone
+from cryptography.fernet import Fernet
 
 def ConvertDate(aDate):
   d1 = aDate.strftime("%d")
@@ -24,6 +25,10 @@ def FormatDate(aDate):
 def FormatTime(aDate)  :
     d1 = aDate.strftime("%H:%M:%S")
     return d1
+
+def CNUMBER(num) :
+  result = f"{num:,.2f}"
+  return result
 
 # ===== GET RUNNING
 
@@ -68,11 +73,28 @@ def TableWhereInfo(FROM, VALUE, WHERE):
   length = len(row)
   return length
 
+def GET_USERNAME_COOKIE(INFO) :
+  if DECRYPT(INFO) == "Developer" :
+    return ["DEVE", "Developer"]
+  SQL = f"SELECT EmpId, CONCAT(PreFix, ' ', F_Name, ' ', L_Name) AS FullName, User, Pass FROM Employee WHERE EmpId = '{DECRYPT(INFO)}'"
+  RESULT = run_query_fetchone(SQL)
+  return RESULT
+
 def run1(r):
   D = ""
   for i in range (int(len(r))-1):
     D += "0"
   return D
 
-#print(ConvertDate("14/09/2021"))
-#print(FormatDate(datetime.now()))
+key = b'AMzNNq1t876s27TtEziqbENXY0i5JYHd5ke_rRM0jOU='
+f = Fernet(key)
+
+def ENCRYPT(txt) :
+  enc = txt.encode("utf-8")
+  result = f.encrypt(enc).decode("utf-8") # ===== เข้ารหัสผ่าน
+  return result
+
+def DECRYPT(txt) :
+  enc = txt.encode("utf-8")
+  result = f.decrypt(enc).decode("utf-8") # ===== ถอดรหัสผ่าน
+  return result

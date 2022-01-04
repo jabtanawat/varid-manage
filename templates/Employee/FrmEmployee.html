@@ -51,12 +51,12 @@
                         <input type="text" name="txtL_Name" id="txtL_Name" class="form-control">
                         <span class="feedback-lname feedback-sm"></span>
                     </div>  
-                    <div class="mb-2">
+                    <!--<div class="mb-2">
                         <div class="form-check form-switch">
                             <input class="form-check-input mt-2" type="checkbox" role="switch" id="txtStatus" name="txtStatus" checked>
                             <label class="form-check-label col-form-label-sm" for="txtStatus">ใช้งาน</label>
                         </div> 
-                    </div> 
+                    </div>-->
                     <p class="text-center col-form-label-sm fw-bold mt-3">Username/Password</p> 
                     <hr>
                     <div class="mb-2">
@@ -111,11 +111,11 @@
                 document.getElementById('txtL_Name').value = data[3]   
                 document.getElementById('txtusername').value = data[4]   
                 document.getElementById('txtpassword').value = data[5]
-                if (data[6] == 'true') {
+                /*if (data[6] == 'true') {
                     document.getElementsByName('txtStatus')[0].checked = true
                 }else{
                     document.getElementsByName('txtStatus')[0].checked = false
-                }
+                }*/
             }               
         });
     }
@@ -129,7 +129,7 @@
         let lname = document.getElementById('txtL_Name').value
         let username = document.getElementById('txtusername').value
         let password = document.getElementById('txtpassword').value
-        let status = document.getElementsByName('txtStatus')[0].checked 
+        //let status = document.getElementsByName('txtStatus')[0].checked 
 
         if (empid == ""){
             document.querySelector('.feedback-empid').innerHTML = ""
@@ -176,7 +176,7 @@
         data.append('L_Name', lname);
         data.append('User', username);
         data.append('Pass', password);
-        data.append('Status', status);
+        //data.append('Status', status);
 
         let option = {
             method: 'POST',

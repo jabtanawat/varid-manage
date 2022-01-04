@@ -69,9 +69,44 @@
         <span class="feedback-transportname feedback-sm"></span>
     </div>
     {% if data.1 != 5 %}
-    <p class="text-primary col-form-label-sm">
-        * ถ้าลูกค้า <strong>"ชำระเงินแล้ว"</strong> หรือ <strong>"ชำระเงินปลายทาง"</strong> ต้องกรอกเลขที่ขนส่ง และบริษัทขนส่งด้วยค่ะ
+    <p class="text-danger col-form-label-sm">
+        *** ถ้าลูกค้า <strong>"ชำระเงินแล้ว"</strong> หรือ <strong>"ชำระเงินปลายทาง"</strong> ต้องกรอกเลขที่ขนส่ง และบริษัทขนส่งด้วยค่ะ
     </p>
+    <table class="table table-sm">
+        <thead>
+            <tr class="text-center">                
+                <th></th>
+                <th>รายการสินค้า</th>
+                <th>#</th>
+                <th>ราคา</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if TABLE|length > 0 %}    
+                {% for x in TABLE %}
+                <tr>
+                    {% if x.4 != "" %}
+                        <td  style="max-width:65px;">
+                            <img src="/static/image/product/{{x.4}}" alt="" style="width:65px;height:65px;">
+                        </td>
+                    {% else %}
+                        <td  style="max-width:65px;">
+                            <img src="/static/image/nopic.jpg" alt="" style="width:65px;height:65px;">
+                        </td>
+                    {% endif %}                    
+                    <td class="text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{x.1}}" style="max-width:150px;">{{x.1}}</td>
+                    <td class="text-center">{{x.2}}</td>
+                    <td class="text-end">{{x.3}}</td>
+                </tr>
+                {% endfor %}                                        
+            {% else %}
+            <tr>                
+                <td colspan="4">ไม่มีรายการ</td>
+            </tr>
+            {% endif %}
+            
+        </tbody>
+    </table>  
     <div class="text-center mt-4">
         {% if data.1 == 1 %}
         <button type="button" class="btn btn-sm btn-success btn-save" disabled><span class="me-2"><i class='bx bx-check'></i></span>ยืนยันคำสั่งซื้อ</button>
@@ -80,6 +115,42 @@
         {% else %}
         <button type="button" class="btn btn-sm btn-success btn-save" onclick="confirm('{{data.0}}')"><span class="me-2"><i class='bx bx-check'></i></span>ยืนยันคำสั่งซื้อ</button>
         {% endif %}
-    </div> 
-    {% endif %}    
+    </div>
+    {% else %}
+    <table class="table table-sm">
+        <thead>
+            <tr class="text-center">                
+                <th></th>
+                <th>รายการสินค้า</th>
+                <th>#</th>
+                <th>ราคา</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if TABLE|length > 0 %}    
+                {% for x in TABLE %}
+                <tr>
+                    {% if x.4 != "" %}
+                        <td  style="max-width:65px;">
+                            <img src="/static/image/product/{{x.4}}" alt="" style="width:65px;height:65px;">
+                        </td>
+                    {% else %}
+                        <td  style="max-width:65px;">
+                            <img src="/static/image/nopic.jpg" alt="" style="width:65px;height:65px;">
+                        </td>
+                    {% endif %}                    
+                    <td class="text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{x.1}}" style="max-width:150px;">{{x.1}}</td>
+                    <td class="text-center">{{x.2}}</td>
+                    <td class="text-end">{{x.3}}</td>
+                </tr>
+                {% endfor %}                                        
+            {% else %}
+            <tr>                
+                <td colspan="4">ไม่มีรายการ</td>
+            </tr>
+            {% endif %}
+            
+        </tbody>
+    </table>
+    {% endif %}
 </form>

@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Kanit';
+    src: url('../../static/font/Kanit/Kanit-Light.ttf') format('truetype');
+}
+
+* {
+    font-family: 'Kanit', sans-serif;
+}
+
+body {
+    color: #6C757D;
+    background-color: #F7F7FC;
+}
+
+.box-lps-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.box-lps-content {
+    display: flex;
+}
+
+.image-lps-login {
+    width: 350px;
+    height: 350px;
+}
+
+.form-lps-label {
+    padding-top: calc(0.25rem + 1px);
+    padding-bottom: calc(0.25rem + 1px);
+    font-size: 0.875rem;
+}
+
+.form-control {
+    padding: 0.575rem 0.75rem;
+}
+
+.box-lps-start {
+    width: 350px;
+    border-right: 1px solid whitesmoke;
+}
+
+.box-lps-end {
+    width: 300px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 768px) {
+    .box-lps-start {
+        display: none;
+    }
+
+    .box-lps-end {
+        padding: 30px 20px;
+    }
+}

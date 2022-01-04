@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request,session, flash, jsonify
+from flask import Blueprint, render_template, redirect, request, flash, jsonify, make_response
 from db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library, os
 from decimal import Decimal
@@ -10,21 +10,39 @@ product = Blueprint('product', __name__)
 # =================================================================================
 
 @product.route('/product')
-def index():
+def index() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     sql = "SELECT Id, Name,(Select Name FROM Category where Id = CategoryId) as Category, case when Active = true then 'ใช้งาน' else 'ปิดใช้งาน' end as Active, Price FROM Product"
     dt =  run_query_fetchall(sql) 
-    return render_template('Product/index.html', data = dt) 
+    return render_template('Product/index.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], data = dt) 
 
 @product.route('/product/frmproduct')
-def frmcategory():
+def frmcategory() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     category = run_query_fetchall("SELECT Id, Name FROM Category") 
-    return render_template('Product/FrmProduct.html', data = category) 
+    return render_template('Product/FrmProduct.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], data = category) 
 
 @product.route('/product/frmgallery/<id>')
 def frmgallery(id) :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     SQL = f"SELECT No, ProductId, ImageFile FROM Gallery WHERE ProductId = '{id}' ORDER BY No ASC"
     DATAGELLERY = run_query_fetchall(SQL) 
-    return render_template('Product/FrmGallery.html', DATA = DATAGELLERY, ID = id) 
+    return render_template('Product/FrmGallery.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], DATA = DATAGELLERY, ID = id) 
 
 # =================================================================================
 # === สินค้า POST

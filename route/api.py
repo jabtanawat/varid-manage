@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from db import run_query_fetchall, run_query_commit, run_query_fetchone
-from library import *
+import library
 
 api = Blueprint('api', __name__)
 
@@ -64,5 +64,6 @@ def bank(id):
 @api.route('/api/employee/<id>', methods=['POST', 'GET'])
 def employee(id):
     sql = f"SELECT EmpId, PreFix, F_Name, L_Name, User, Pass, IF(Status, 'true', 'false') AS Status FROM Employee WHERE EmpId = '{id}'"
-    data =  run_query_fetchone(sql)
+    info =  run_query_fetchone(sql)
+    data = [info[0], info[1], info[2], info[3], info[4], library.DECRYPT(info[5]), info[6]]
     return jsonify(data)

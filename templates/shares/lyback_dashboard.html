@@ -87,11 +87,6 @@
             <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
                 <div class="container-fluid">
                     <ul class="navbar-nav d-flex flex-row  mb-2 mb-lg-0">
-                        <li class="nav-item" id="brand_show">
-                            <a class="nav-link" aria-current="page" href="#">
-                                <img src="/static/image/logo-D.png" class="picture_logo_navbar"><span class="align-middle fw-bold ms-1">ashboard</span>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" id="button-bar" role="button">
                                 <i class="fas fa-bars mt-2"></i>                               
@@ -101,12 +96,12 @@
                     <form class="d-flex">
                         <div class="dropdown">
                             <a href="#" class="nav-link py-0" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="name_navbar">Tanawat Lawprasert</span>
+                                <span class="name_navbar">{{NAME_USER}}</span>
                                 <img src="/static/image/user.png" class="picture_navbar">
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item text-muted" href="#"><i class='bx bx-user'></i><span class="col-form-label-sm ms-2">Profile</span></a></li>
-                                <li><a class="dropdown-item text-muted" href="#"><i class='bx bx-log-out'></i><span class="col-form-label-sm ms-2">Sign Out</span></a></li>
+                                <li><a class="dropdown-item text-muted" href="/login/signout"><i class='bx bx-log-out'></i><span class="col-form-label-sm ms-2">Sign Out</span></a></li>
                             </ul>
                         </div>
                     </form>

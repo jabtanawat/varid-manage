@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request,session, flash, jsonify
+from flask import Blueprint, render_template, redirect, request, flash, make_response
 from db import run_query_fetchall, run_query_commit, run_query_fetchone
 import library
 from datetime import datetime
@@ -10,7 +10,13 @@ orderhistorys = Blueprint('orderhistory', __name__)
 # =================================================================================
 
 @orderhistorys.route('/orderhistory')
-def orderhistory():
+def orderhistory() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     sql = "SELECT OrderId, Name, DocDate, DocTime, Status FROM Orders LEFT JOIN Member ON Orders.MemberId = Member.MemberId WHERE Status IN (5)"
     dt_now = run_query_fetchall(sql) 
     dt =[]
@@ -20,7 +26,7 @@ def orderhistory():
         date = str(library.FormatDate(x[2])) + ' ' + str(x[3])
         status = x[4]
         dt.append([order, menber, date, status])
-    return render_template('/OrderHistory/Index.html', data = dt)
+    return render_template('/OrderHistory/Index.html', NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], data = dt)
 
 @orderhistorys.route('/orderdetail/<id>')
 def orderdetail(id):

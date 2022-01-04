@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Varid14 - Dashboard</title>
+    <link href="/static/image/logo-D.png" rel="icon">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.0/css/bootstrap.css" />
+    <link rel="stylesheet" href="/static/plugins/fontawesome-5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="/static/plugins/boxicons-2.0.9/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/style-login.css" />
+</head>
+<body>
+
+    <div class="box-lps-container">
+        <div class="card border-0">
+            <div class="card-body">
+                <div class="box-lps-content">
+                    <div class="box-lps-start">
+                        <img src="/static/image/system/login.png" alt="" class="image-lps-login">
+                    </div>
+                    <div class="box-lps-end">
+                        <h5>Login.</h5>
+                        <p>Sign in. Dashboard Varid14</p>
+                        <form action="/login/signin" method="post" class="w-100">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-transparent text-black-50 border-end-0">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="text" name="txtUser" class="form-control border-start-0" placeholder="Username" autofocus>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-transparent text-black-50 border-end-0">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" name="txtPass" class="form-control border-start-0" placeholder="Password">
+                            </div>
+                            <button type="submit" class="btn btn-success w-100"> <span class="me-2">LOGIN</span> <i class="fas fa-arrow-circle-right"></i></button>
+                        </form>
+                    </div>
+                </div>                
+            </div>
+        </div>        
+    </div>
+
+    <script src="/static/plugins/bootstrap-5.1.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            {% for category, msg in messages %}
+                <script>
+                    Swal.fire({icon: '{{category}}', text: '{{msg}}'})
+                </script>        
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

@@ -51,7 +51,7 @@
                 <td>{{x[3]}}</td>
                 <td class="text-end">{{x[4]}}</td>
                 <td class="text-center">
-                  <button class="btn btn-primary btn-sm" onclick="modalClick('{{x[1]}}')">ดูข้อมูล</button>
+                  <button class="btn btn-primary btn-sm" onclick="modalClick('{{x[1]}}', '{{x[2]}}')">ดูข้อมูล</button>
                 </td>
               </tr>
             {% endfor %}
@@ -65,12 +65,11 @@
   <div class="modal fade" id="body_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
+        <div class="modal-header">
+          <label class="col-form-label-sm fw-bold"><i class='bx bx-wallet-alt'></i><span class="ms-2">ข้อมูลการชำระเงิน</span></label>
+          <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+        </div>
         <div class="modal-body">
-          <div class="d-flex justify-content-between">
-            <label class="col-form-label-sm fw-bold"><i class='bx bx-wallet-alt'></i><span class="ms-2">ข้อมูลการชำระเงิน</span></label>
-            <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
-          </div>
-          <hr>
           <div class="areaBody"></div>
         </div>
       </div>
@@ -99,9 +98,10 @@
       keyboard: false
     })
 
-    function modalClick(id) {
+    function modalClick(id, order) {
       var data = new FormData();        
       data.append('PaymentId', id);
+      data.append('OrderId', order);
 
       let option = { method: 'POST', body: data}
       fetch('/modal/payment', option)

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,redirect, url_for,request,session, flash
+from flask import Blueprint, render_template,redirect, url_for,request,session, flash, make_response
 from db import run_query_fetchall, run_query_commit,run_query_fetchone
 from datetime import datetime
 import library
@@ -32,15 +32,22 @@ back = Blueprint('back', __name__)
 
 @back.route('/')
 def index() :
+    USERNAME_DASHBOARD = request.cookies.get('varid14Dashboard') 
+    if not USERNAME_DASHBOARD :
+        flash("หมดอายุการใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "warning")
+        res = make_response(redirect('/login'))
+        res.set_cookie('varid14Dashboard', value = '', expires = 0)
+        return res
     SQLDATENOW = f"SELECT COUNT(OrderId) FROM Orders WHERE DocDate = '{library.ConvertDate(datetime.now())}'"
-    INFODATENOW = run_query_fetchone(SQLDATENOW)
+    INFODATENOW = run_query_fetchone(SQLDATENOW) # จำนวนคำสั่งซื้อวันนี้
     SQLDATEALL = f"SELECT COUNT(OrderId) FROM Orders"
-    INFODATEALL = run_query_fetchone(SQLDATEALL)
+    INFODATEALL = run_query_fetchone(SQLDATEALL) # ยอดสั่งซื้อวันนี้
     SQLSUMNOW = f"SELECT IFNULL(SUM(Price), 0) FROM Orders WHERE DocDate = '{library.ConvertDate(datetime.now())}'"
-    INFOSUMNOW = run_query_fetchone(SQLSUMNOW)
+    INFOSUMNOW = run_query_fetchone(SQLSUMNOW) # จำนวนคำสั่งซื้อทั้งหมด
     SQLSUMALL = f"SELECT IFNULL(SUM(Price), 0) FROM Orders"
-    INFOSUMALL = run_query_fetchone(SQLSUMALL)
-    return render_template('index.html')
+    INFOSUMALL = run_query_fetchone(SQLSUMALL) # ยอดสั่งซื้อทั้งหมด
+    DATAOVERVIEW = [INFODATENOW[0], library.CNUMBER(INFOSUMNOW[0]), INFODATEALL[0], library.CNUMBER(INFOSUMALL[0])]
+    return render_template('index.html', DATAOVERVIEW = DATAOVERVIEW, NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1])
 
 @back.route('/bn/login')
 def login():
