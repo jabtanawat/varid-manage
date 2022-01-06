@@ -1,5 +1,7 @@
 {% extends 'shares/lyback_dashboard.html' %}
 
+{% block title %} Overview | Varid14 - Dashboard {% endblock %}
+
 {% block styles %}
 
 <link rel="stylesheet" href="/static/css/bn_index.css" />  
@@ -57,7 +59,7 @@
 </div>
 
 <div class="card mb-4">
-    <div class="card-header">ข้อมูลยอดขายในแต่ละเดือน</div>
+    <div class="card-header">ข้อมูลยอดขายในแต่ละเดือน ประจำปี {{YEAR}}</div>
     <div class="card-body">
         <div class="chart">
             <canvas id="LoanChart" style="min-height: 320px; height: 320px; max-height: 320px; max-width: 100%;"></canvas>
@@ -81,36 +83,42 @@
     showGraphLoan()
 
     function showGraphLoan() {
-        var ctx = document.getElementById('LoanChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-                datasets: [{
-                    label: 'ยอดสั่งซื้อ',
-                    data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)' 
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
+
+        fetch('/api/chart')
+        .then(response => response.json())
+        .then(data => {
+            
+            var ctx = document.getElementById('LoanChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+                    datasets: [{
+                        label: 'ยอดสั่งซื้อ',
+                        data: [data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11]],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.2)' 
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    },
+                    ]
                 },
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
                     }
                 }
-            }
+            });
         });
     }
 </script>

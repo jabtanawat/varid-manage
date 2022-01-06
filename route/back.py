@@ -47,7 +47,9 @@ def index() :
     SQLSUMALL = f"SELECT IFNULL(SUM(Price), 0) FROM Orders"
     INFOSUMALL = run_query_fetchone(SQLSUMALL) # ยอดสั่งซื้อทั้งหมด
     DATAOVERVIEW = [INFODATENOW[0], library.CNUMBER(INFOSUMNOW[0]), INFODATEALL[0], library.CNUMBER(INFOSUMALL[0])]
-    return render_template('index.html', DATAOVERVIEW = DATAOVERVIEW, NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1])
+    TODAY = datetime.now().strftime("%Y")
+    YEAR = int(TODAY) + 543
+    return render_template('index.html', DATAOVERVIEW = DATAOVERVIEW, NAME_USER = library.GET_USERNAME_COOKIE(USERNAME_DASHBOARD)[1], YEAR = YEAR)
 
 @back.route('/bn/login')
 def login():
@@ -95,112 +97,3 @@ def callback():
     Avatar <img src="{picture_url}"> <br>
     <a href="/">Home</a>
     """
-
-
-
-
-
-
-
-
-@back.route('/saveproduct',methods=["POST"])
-def saveproduct():
-    if request.method == 'POST':
-        P_Id = request.form["P_Id"]
-        P_Name = request.form["P_Name"]
-        P_Group = request.form["P_Group"]
-        P_Price = request.form["P_Price"]
-        P_Count = ""
-        P_Date = datetime.DateNow()
-        P_Detail = request.form["P_Detail"]
-      
-        
-        sql = "INSERT INTO product (P_Id, P_Name,P_Group,P_Price,P_Count,P_Date,P_Detail ,P_Status,P_Color) VALUE (%s, %s, %s, %s, %s, %s, %s, %s,%s)"
-        executes = (P_Id, P_Name,P_Group, P_Price,P_Count,library.ConvertDate(P_Date),P_Detail,True, "")
-        run_query_commit(sql, executes)
-
-        Dt =  run_query_fetchall("SELECT P_Id,P_Name,(Select Name  FROM productgroup  where Id=P_Group) as P_GroupName,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status,P_Group,P_Price,P_Count,P_Date  FROM product") 
-    return render_template('bn/product.html',data=Dt) 
-
-
-
-@back.route('/bn/productdetail/<id>')
-def productdetail(id):
-    class product:
-        def __init__(self,P_Id, P_Name, P_Group,P_Price,P_Date,P_Detail,P_Count,P_Status):
-            self.P_Id = P_Id
-            self.P_Name = P_Name
-            self.P_Group = P_Group
-            self.P_Price = P_Price
-            self.P_Date = P_Date
-            self.P_Detail = P_Detail
-            self.P_Count = P_Count
-            self.P_Status = P_Status
-    data =  run_query_fetchone(f"SELECT P_Id,P_Name,P_Group,P_Price,P_Date,P_Detail,P_Count,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status  FROM product where P_Id='{id}' ") 
-
-    info = product(str(data[0]),str(data[1]),str(data[2]),str(data[3]),library.FormatDate(data[4]),str(data[5]),str(data[6]),str(data[7]))
-    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
-    return render_template('bn/productdetail.html',info=info,data=Dt1)
-
-@back.route('/bn/productedit/<id>')
-def productedit(id):
-    class product:
-        def __init__(self,P_Id, P_Name, P_Group,P_Price,P_Date,P_Detail,P_Count,P_Status):
-            self.P_Id = P_Id
-            self.P_Name = P_Name
-            self.P_Group = P_Group
-            self.P_Price = P_Price
-            self.P_Date = P_Date
-            self.P_Detail = P_Detail
-            self.P_Count = P_Count
-            self.P_Status = P_Status
-    data =  run_query_fetchone(f"SELECT P_Id,P_Name,P_Group,P_Price,P_Date,P_Detail,P_Count,case when P_Status=true then 'ใช้งาน' else 'ปิดใช้งาน'  end as P_Status  FROM product where P_Id='{id}' ") 
-
-
-    info = product(str(data[0]),str(data[1]),str(data[2]),str(data[3]),library.FormatDate(data[4]),str(data[5]),str(data[6]),str(data[7]))
-    Dt1 = run_query_fetchall("SELECT Id,Name  FROM productgroup where Status=true") 
-    return render_template('bn/productedit.html',info=info,data=Dt1)
-
-
-
-
-
-
-
-
-
-
-
-@back.route('/editproduct', methods=["POST"])
-def editproduct():
-    if request.method == 'POST':
-        P_Id = request.form["P_Id"]
-        P_Name = request.form["P_Name"]
-        P_Group = request.form["P_Group"]
-        P_Price = request.form["P_Price"]
-        
-     
-        P_Detail = request.form["P_Detail"]
-        sql ="update product set P_Id=%s,P_Name=%s,P_Group=%s,P_Price=%s,P_Detail=%s  where Id=%s"
-        executes = (P_Id, P_Name, P_Group,P_Price,P_Detail)
-        run_query_commit(sql, executes)
-    
-        Dt =  run_query_fetchall(f"SELECT *  FROM product where Status=true") 
-    return render_template('bn/product.html',data=Dt) 
-
-
-
-
-
-
-
-
-
-
-
-
-@back.route('/bn/runing')
-def runing():
-  
-    return render_template('bn/runing.html')
-

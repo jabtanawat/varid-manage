@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Varid14 - Dashboard</title>
+    <title>{% block title %} {% endblock %}</title>
     <link href="/static/image/logo-D.png" rel="icon">
     <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.0/css/bootstrap.css" />
     <link rel="stylesheet" href="/static/plugins/fontawesome-5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="/static/plugins/boxicons-2.0.9/css/boxicons.min.css" />
     <link rel="stylesheet" href="/static/css/LyDashboad.css" />  
-    <link rel="stylesheet" href="/static/plugins/bootstrap-datepicker-thai-thai/css/datepicker.css" />
     {% block styles %} {% endblock %}
 </head>
 <body>
@@ -75,7 +74,7 @@
                         <div class="menu collapse" id="collapse5">
                             <ul class="navbar-nav submenu_box">
                                 <li><a href="#" class="nav-link">กำหนดผู้ใช้งาน</a></li>
-                                <li><a href="{{url_for('back.runing')}}" class="nav-link">กำหนดเลขที่เอกสาร</a></li>
+                                <li><a href="#" class="nav-link">กำหนดเลขที่เอกสาร</a></li>
                             </ul>
                         </div>
                     </li>-->
@@ -118,9 +117,6 @@
     <script src="/static/js/jquery-3.6.0.js"></script>
     <script src="/static/plugins/bootstrap-5.1.0/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/LyDashboard.js"></script>
-    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker.js"></script>
-    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/bootstrap-datepicker-thai.js"></script>
-    <script src="/static/plugins/bootstrap-datepicker-thai-thai/js/locales/bootstrap-datepicker.th.js"></script>    
     {% block scripts %} {% endblock %}
 </body>
 </html>

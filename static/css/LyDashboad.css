@@ -275,7 +275,7 @@ body {
 
 .navbar {
     box-shadow: 10px 0 5px 2px #DEE2E6;
-    z-index: 0;
+    z-index: 1;
 }
 
 .name_navbar {
